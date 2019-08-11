@@ -1,8 +1,4 @@
-FROM openfaas/of-watchdog:0.5.3 as watchdog
-FROM golang:1.12.7-alpine3.10 as build
-
-COPY --from=watchdog /fwatchdog /usr/bin/fwatchdog
-RUN chmod +x /usr/bin/fwatchdog
+FROM golang:1.12.7 as build
 
 RUN mkdir -p /go/src/handler
 WORKDIR /go/src/handler
@@ -15,7 +11,9 @@ RUN CGO_ENABLED=0 GOOS=linux \
     go build --ldflags "-s -w" -a -installsuffix cgo -o handler . && \
     go test $(go list ./... | grep -v /vendor/) -cover
 
+FROM openfaas/of-watchdog:0.5.3 as watchdog
 FROM alpine:3.10
+
 # Add non root user and certs
 RUN apk --no-cache add ca-certificates \
     && addgroup -S app && adduser -S -g app app \
@@ -25,8 +23,9 @@ RUN apk --no-cache add ca-certificates \
 WORKDIR /home/app
 
 COPY --from=build /go/src/handler/handler    .
-COPY --from=build /usr/bin/fwatchdog         .
-COPY --from=build /go/src/handler/function/  .
+COPY --from=watchdog /fwatchdog              .
+
+RUN chmod +x ./fwatchdog
 
 RUN chown -R app /home/app
 
