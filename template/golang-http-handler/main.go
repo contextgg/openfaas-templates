@@ -9,7 +9,7 @@ import (
 	"time"
 
 	"handler/function"
-	//"github.com/openfaas-incubator/golang-http-template/template/golang-middleware/function"
+	// "github.com/contextgg/openfaas-templates/template/golang-http-handler/function"
 )
 
 func parseIntOrDurationValue(val string, fallback time.Duration) time.Duration {
@@ -34,7 +34,7 @@ func main() {
 	h := function.NewHandler()
 
 	s := &http.Server{
-		Handler:        r,
+		Handler:        h,
 		Addr:           fmt.Sprintf(":%d", 8082),
 		ReadTimeout:    readTimeout,
 		WriteTimeout:   writeTimeout,
