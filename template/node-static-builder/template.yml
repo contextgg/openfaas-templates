@@ -1,0 +1,2 @@
+language: node-static-builder
+fprocess: serve -s build
