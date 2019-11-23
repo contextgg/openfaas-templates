@@ -13,7 +13,7 @@ COPY function/ ./
 
 RUN yarn build
 
-FROM openfaas/of-watchdog:0.5.3 as watchdog
+FROM openfaas/of-watchdog:0.7.2 as watchdog
 FROM node:12.8.0-alpine as ship
 
 RUN apk --no-cache add curl ca-certificates \
@@ -27,9 +27,6 @@ RUN mkdir -p /home/app
 # Wrapper/boot-strapper
 WORKDIR /home/app
 
-# Add the serve
-RUN yarn global add serve
-
 COPY --from=builder /home/app/build /home/app/build
 COPY --from=watchdog /fwatchdog /usr/bin/fwatchdog
 RUN chmod +x /usr/bin/fwatchdog
@@ -41,9 +38,8 @@ RUN chown app:app -R /home/app \
 USER app
 
 ENV cgi_headers="true"
-ENV fprocess="serve -s build"
-ENV mode="http"
-ENV upstream_url="http://127.0.0.1:5000"
+ENV static_path="build"
+ENV mode="static"
 
 ENV exec_timeout="10s"
 ENV write_timeout="15s"

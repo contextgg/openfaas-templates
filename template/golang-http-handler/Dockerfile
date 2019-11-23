@@ -11,7 +11,7 @@ RUN CGO_ENABLED=0 GOOS=linux \
     go build --ldflags "-s -w" -a -installsuffix cgo -o handler . && \
     go test $(go list ./... | grep -v /vendor/) -cover
 
-FROM openfaas/of-watchdog:0.5.3 as watchdog
+FROM openfaas/of-watchdog:0.7.2 as watchdog
 FROM alpine:3.10
 
 # Add non root user and certs
