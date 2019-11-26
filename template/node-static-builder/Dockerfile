@@ -27,6 +27,9 @@ RUN mkdir -p /home/app
 # Wrapper/boot-strapper
 WORKDIR /home/app
 
+# Add the serve
+RUN yarn global add serve
+
 COPY --from=builder /home/app/build /home/app/build
 COPY --from=watchdog /fwatchdog /usr/bin/fwatchdog
 RUN chmod +x /usr/bin/fwatchdog
@@ -38,8 +41,9 @@ RUN chown app:app -R /home/app \
 USER app
 
 ENV cgi_headers="true"
-ENV static_path="build"
-ENV mode="static"
+ENV fprocess="serve -s build"
+ENV mode="http"
+ENV upstream_url="http://127.0.0.1:5000"
 
 ENV exec_timeout="10s"
 ENV write_timeout="15s"
