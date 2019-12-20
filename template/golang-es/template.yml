@@ -1,0 +1,2 @@
+language: golang-es
+fprocess: ./handler
