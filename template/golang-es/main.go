@@ -10,11 +10,25 @@ import (
 
 	"github.com/contextgg/go-es/builder"
 	"github.com/contextgg/go-es/httputils"
+	"github.com/contextgg/go-sdk/hydra"
 	"github.com/contextgg/go-sdk/secrets"
 
-	"handler/function"
-	// "github.com/contextgg/openfaas-templates/template/golang-es/function"
+	// "handler/function"
+	"github.com/contextgg/openfaas-templates/template/golang-es/function"
 )
+
+// Middleware used to help auth
+type Middleware func(http.Handler) http.Handler
+
+// UseHandler wraps a CommandHandler in one or more middleware.
+func UseHandler(h http.Handler, middleware ...Middleware) http.Handler {
+	// Apply in reverse order.
+	for i := len(middleware) - 1; i >= 0; i-- {
+		m := middleware[i]
+		h = m(h)
+	}
+	return h
+}
 
 func parseIntOrDurationValue(val string, fallback time.Duration) time.Duration {
 	if len(val) > 0 {
@@ -72,6 +86,17 @@ func main() {
 	natsURI := secrets.MustReadSecret("nats_uri", "")
 	natsNS := secrets.MustReadSecret("nats_namespace", "")
 
+	creds := secrets.LoadBasicAuth("auth")
+	hydraURL := secrets.MustReadSecret("hydra_url", "")
+
+	middleware := []Middleware{}
+	if creds != nil {
+		middleware = append(middleware, secrets.AuthHandlerOptional())
+	}
+	if len(hydraURL) > 0 {
+		middleware = append(middleware, hydra.AuthHandlerOptional(hydraURL))
+	}
+
 	b := builder.NewClientBuilder()
 	setupMongodb(b, mongodbURI, mongodbDB, snapshotMin)
 	setupNats(b, natsURI, natsNS)
@@ -84,7 +109,7 @@ func main() {
 	}
 
 	s := &http.Server{
-		Handler:        httputils.CommandHandler(cli.CommandBus),
+		Handler:        UseHandler(httputils.CommandHandler(cli.CommandBus), middleware...),
 		Addr:           fmt.Sprintf(":%d", 8082),
 		ReadTimeout:    readTimeout,
 		WriteTimeout:   writeTimeout,

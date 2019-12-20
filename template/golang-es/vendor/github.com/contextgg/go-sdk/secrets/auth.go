@@ -22,6 +22,17 @@ type BasicAuthCredentials struct {
 	Password string
 }
 
+// Equals checks if username and password are the same
+func (b *BasicAuthCredentials) Equals(a *BasicAuthCredentials) bool {
+	if b == a {
+		return true
+	}
+	if b == nil || a == nil {
+		return false
+	}
+	return b.Username == a.Username && b.Password == a.Password
+}
+
 // LoadBasicAuth will load the secrets from disk
 func LoadBasicAuth(prefix string) *BasicAuthCredentials {
 	if prefix == "" {
