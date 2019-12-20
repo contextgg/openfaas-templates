@@ -1,6 +1,6 @@
 FROM golang:1.13 as build
 
-RUN CGO_ENABLED=0
+ENV CGO_ENABLED=0
 
 RUN mkdir -p /go/src/handler
 WORKDIR /go/src/handler
