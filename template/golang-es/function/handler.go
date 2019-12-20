@@ -5,9 +5,7 @@ import (
 	"log"
 
 	"github.com/contextgg/go-es/builder"
-	"github.com/contextgg/go-es/contrib/basicauth"
 	"github.com/contextgg/go-es/es"
-	"github.com/contextgg/go-sdk/secrets"
 )
 
 // HelloCommand our hello command
@@ -26,11 +24,5 @@ func (h *HelloCommandHandler) HandleCommand(ctx context.Context, cmd es.Command)
 }
 
 func Setup(build builder.ClientBuilder) {
-	creds := secrets.LoadBasicAuth("auth")
-
-	middleware := []es.CommandHandlerMiddleware{
-		basicauth.NewMiddleware(creds),
-	}
-
-	build.WireCommandHandler(&HelloCommandHandler{}, builder.Command(&HelloCommand{}, middleware...))
+	build.WireCommandHandler(&HelloCommandHandler{}, builder.Command(&HelloCommand{}))
 }
