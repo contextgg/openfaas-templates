@@ -1,8 +1,6 @@
 FROM golang:1.13 as build
 
 RUN CGO_ENABLED=0
-RUN go get github.com/contextgg/go-sdk/...
-RUN go get github.com/contextgg/go-es/...
 
 RUN mkdir -p /go/src/handler
 WORKDIR /go/src/handler
@@ -11,9 +9,11 @@ COPY . .
 # Run a gofmt and exclude all vendored code.
 RUN test -z "$(gofmt -l $(find . -type f -name '*.go' -not -path "./vendor/*" -not -path "./function/vendor/*"))" || { echo "Run \"gofmt -s -w\" on your Golang code"; exit 1; }
 
-RUN CGO_ENABLED=0 GOOS=linux \
-    go build --ldflags "-s -w" -a -installsuffix cgo -o handler . && \
-    go test $(go list ./... | grep -v /vendor/) -cover
+ARG GO111MODULE="off"
+ARG GOPROXY=""
+
+RUN go build --ldflags "-s -w" -a -installsuffix cgo -o handler .
+RUN go test handler/function/... -cover
 
 FROM openfaas/of-watchdog:0.7.2 as watchdog
 FROM alpine:3.10
