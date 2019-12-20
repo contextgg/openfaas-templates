@@ -1,5 +1,9 @@
 FROM golang:1.13 as build
 
+RUN CGO_ENABLED=0
+RUN go get github.com/contextgg/go-sdk/...
+RUN go get github.com/contextgg/go-es/...
+
 RUN mkdir -p /go/src/handler
 WORKDIR /go/src/handler
 COPY . .
