@@ -13,8 +13,8 @@ import (
 	"github.com/contextgg/go-sdk/hydra"
 	"github.com/contextgg/go-sdk/secrets"
 
-	// "handler/function"
-	"github.com/contextgg/openfaas-templates/template/golang-es/function"
+	"handler/function"
+	// "github.com/contextgg/openfaas-templates/template/golang-es/function"
 )
 
 // Middleware used to help auth
