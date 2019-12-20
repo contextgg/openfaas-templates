@@ -7,7 +7,6 @@ COPY . .
 # Run a gofmt and exclude all vendored code.
 RUN test -z "$(gofmt -l $(find . -type f -name '*.go' -not -path "./vendor/*" -not -path "./function/vendor/*"))" || { echo "Run \"gofmt -s -w\" on your Golang code"; exit 1; }
 
-ENV GO111MODULE=off
 RUN CGO_ENABLED=0 GOOS=linux \
     go build --ldflags "-s -w" -a -installsuffix cgo -o handler . && \
     go test $(go list ./... | grep -v /vendor/) -cover
