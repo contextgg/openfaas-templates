@@ -1,8 +1,12 @@
 cloud.google.com/go v0.34.0/go.mod h1:aQUYkXzVsufM+DwF1aE+0xfcU+56JwCaLick0ClmMTw=
 github.com/contextgg/go-es v1.2.1 h1:Dm0vcd37FfscY7AGp7aTcba+M8I8VjaPinroCZkKG7A=
 github.com/contextgg/go-es v1.2.1/go.mod h1:2OdifyIHcwEgdYz40jbMAe0J8YtC9hEwbq9mqic2eAc=
+github.com/contextgg/go-es v1.3.0 h1:sGGufTRHlBMpEAoGhYEtdqOpZRHNqK+Tdu/TOQDx2wE=
+github.com/contextgg/go-es v1.3.0/go.mod h1:2OdifyIHcwEgdYz40jbMAe0J8YtC9hEwbq9mqic2eAc=
 github.com/contextgg/go-sdk v1.6.1 h1:2+byzQbmq6ezczUYqwuf8cRNGAtgG+ZoqVflI2dQnfw=
 github.com/contextgg/go-sdk v1.6.1/go.mod h1:kZJdgq1BFtq6sh6br3SmTU4QY5x/jRKwPTVqV+/RBxI=
+github.com/contextgg/go-sdk v1.6.2 h1:edK/XgD2GuvwyYofZiOzR5TM5Bqy5vUZrB2aXguA3Uo=
+github.com/contextgg/go-sdk v1.6.2/go.mod h1:kZJdgq1BFtq6sh6br3SmTU4QY5x/jRKwPTVqV+/RBxI=
 github.com/davecgh/go-spew v1.1.0 h1:ZDRjVQ15GmhC3fiQ8ni8+OwkZQO4DARzQgrnXU1Liz8=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/golang/protobuf v1.2.0 h1:P3YflyNX/ehuJFLhxviNdFxQPkGK5cDcApsge1SqnvM=

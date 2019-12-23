@@ -109,7 +109,7 @@ func main() {
 	}
 
 	s := &http.Server{
-		Handler:        UseHandler(httputils.CommandHandler(cli.CommandBus), middleware...),
+		Handler:        UseHandler(httputils.CombinedHandler(cli.EventRegistry, cli.EventHandler, cli.CommandBus), middleware...),
 		Addr:           fmt.Sprintf(":%d", 8082),
 		ReadTimeout:    readTimeout,
 		WriteTimeout:   writeTimeout,

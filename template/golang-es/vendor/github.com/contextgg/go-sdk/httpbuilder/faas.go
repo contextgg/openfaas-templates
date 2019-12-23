@@ -13,6 +13,9 @@ type FaaSHTTPBuilder interface {
 	// SetFunction the Faas Function we want to invoke
 	SetFunction(string) FaaSHTTPBuilder
 
+	// AppendPath will append the the URL set
+	AppendPath(string) FaaSHTTPBuilder
+
 	// SetMethod the method used to invoke
 	SetMethod(string) FaaSHTTPBuilder
 
@@ -60,6 +63,11 @@ type faasHTTPBuilder struct {
 
 func (b *faasHTTPBuilder) SetFunction(name string) FaaSHTTPBuilder {
 	b.functionName = name
+	return b
+}
+
+func (b *faasHTTPBuilder) AppendPath(part string) FaaSHTTPBuilder {
+	b.builder.AppendPath(part)
 	return b
 }
 
