@@ -54,13 +54,11 @@ func parseInt(val string, fallback int) int {
 	return fallback
 }
 
-func makeStoreFactory(uri, db string, snapshot int) builder.AggregateStoreFactory {
+func makeStoreFactory(uri, db, username, password string) builder.DataStoreFactory {
 	if len(uri) == 0 || len(db) == 0 {
 		return builder.LocalStore()
 	}
-	return builder.Mongo(uri, db, snapshot)
-}
-func setupNats(build builder.ClientBuilder, natsURI, natsNS string) {
+	return builder.Mongo(uri, db, username, password)
 }
 
 func main() {
@@ -69,6 +67,8 @@ func main() {
 
 	mongodbURI := secrets.MustReadSecret("mongodb_uri", "")
 	mongodbDB := secrets.MustReadSecret("mongodb_db", "")
+	mongodbUsername := secrets.MustReadSecret("mongodb_username", "")
+	mongodbPassword := secrets.MustReadSecret("mongodb_password", "")
 	snapshotMin := parseInt(os.Getenv("snapshot_min"), -1)
 	natsURI := secrets.MustReadSecret("nats_uri", "")
 	natsNS := secrets.MustReadSecret("nats_namespace", "")
@@ -84,12 +84,13 @@ func main() {
 		middleware = append(middleware, hydra.AuthHandlerOptional(hydraURL))
 	}
 
-	storeFactory := makeStoreFactory(mongodbURI, mongodbDB, snapshotMin)
+	storeFactory := makeStoreFactory(mongodbURI, mongodbDB, mongodbUsername, mongodbPassword)
 	b, err := builder.NewClientBuilder(storeFactory)
 	if err != nil {
 		log.Fatalf("NewClientBuilder failed %v", err)
 		return
 	}
+	b.SetDefaultSnapshotMin(snapshotMin)
 
 	if len(natsURI) != 0 && len(natsNS) != 0 {
 		b.AddPublisher(
