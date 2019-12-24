@@ -54,26 +54,13 @@ func parseInt(val string, fallback int) int {
 	return fallback
 }
 
-func setupMongodb(build builder.ClientBuilder, uri, db string, snapshot int) {
+func makeStoreFactory(uri, db string, snapshot int) builder.AggregateStoreFactory {
 	if len(uri) == 0 || len(db) == 0 {
-		build.SetEventStore(
-			builder.LocalStore(),
-		)
-		return
+		return builder.LocalStore()
 	}
-
-	build.SetEventStore(
-		builder.Mongo(uri, db, snapshot),
-	)
+	return builder.Mongo(uri, db, snapshot)
 }
 func setupNats(build builder.ClientBuilder, natsURI, natsNS string) {
-	if len(natsURI) == 0 || len(natsNS) == 0 {
-		return
-	}
-
-	build.AddPublisher(
-		builder.Nats(natsURI, natsNS),
-	)
 }
 
 func main() {
@@ -97,14 +84,24 @@ func main() {
 		middleware = append(middleware, hydra.AuthHandlerOptional(hydraURL))
 	}
 
-	b := builder.NewClientBuilder()
-	setupMongodb(b, mongodbURI, mongodbDB, snapshotMin)
-	setupNats(b, natsURI, natsNS)
+	storeFactory := makeStoreFactory(mongodbURI, mongodbDB, snapshotMin)
+	b, err := builder.NewClientBuilder(storeFactory)
+	if err != nil {
+		log.Fatalf("NewClientBuilder failed %v", err)
+		return
+	}
+
+	if len(natsURI) != 0 && len(natsNS) != 0 {
+		b.AddPublisher(
+			builder.Nats(natsURI, natsNS),
+		)
+	}
+
 	function.Setup(b)
 
 	cli, err := b.Build()
 	if err != nil {
-		log.Fatalf("Setup failed %v", err)
+		log.Fatalf("Build failed %v", err)
 		return
 	}
 

@@ -3,6 +3,8 @@ github.com/contextgg/go-es v1.2.1 h1:Dm0vcd37FfscY7AGp7aTcba+M8I8VjaPinroCZkKG7A
 github.com/contextgg/go-es v1.2.1/go.mod h1:2OdifyIHcwEgdYz40jbMAe0J8YtC9hEwbq9mqic2eAc=
 github.com/contextgg/go-es v1.3.0 h1:sGGufTRHlBMpEAoGhYEtdqOpZRHNqK+Tdu/TOQDx2wE=
 github.com/contextgg/go-es v1.3.0/go.mod h1:2OdifyIHcwEgdYz40jbMAe0J8YtC9hEwbq9mqic2eAc=
+github.com/contextgg/go-es v1.3.1 h1:sJEt9Uxpbl40nWNe3Dn+8/MeRxscfSHmfQDjNko+1Lw=
+github.com/contextgg/go-es v1.3.1/go.mod h1:2OdifyIHcwEgdYz40jbMAe0J8YtC9hEwbq9mqic2eAc=
 github.com/contextgg/go-sdk v1.6.1 h1:2+byzQbmq6ezczUYqwuf8cRNGAtgG+ZoqVflI2dQnfw=
 github.com/contextgg/go-sdk v1.6.1/go.mod h1:kZJdgq1BFtq6sh6br3SmTU4QY5x/jRKwPTVqV+/RBxI=
 github.com/contextgg/go-sdk v1.6.2 h1:edK/XgD2GuvwyYofZiOzR5TM5Bqy5vUZrB2aXguA3Uo=
