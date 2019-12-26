@@ -1,6 +1,6 @@
 # github.com/DataDog/zstd v1.4.4
 github.com/DataDog/zstd
-# github.com/contextgg/go-es v1.4.2
+# github.com/contextgg/go-es v1.4.3
 github.com/contextgg/go-es/builder
 github.com/contextgg/go-es/es
 github.com/contextgg/go-es/es/basic
@@ -30,6 +30,11 @@ github.com/opentracing/opentracing-go
 github.com/opentracing/opentracing-go/log
 # github.com/pkg/errors v0.8.1
 github.com/pkg/errors
+# github.com/rs/zerolog v1.17.2
+github.com/rs/zerolog
+github.com/rs/zerolog/internal/cbor
+github.com/rs/zerolog/internal/json
+github.com/rs/zerolog/log
 # github.com/xdg/scram v0.0.0-20180814205039-7eeb5667e42c
 github.com/xdg/scram
 # github.com/xdg/stringprep v1.0.0

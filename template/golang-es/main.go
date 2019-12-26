@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"os"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/contextgg/go-es/builder"
@@ -53,12 +54,18 @@ func parseInt(val string, fallback int) int {
 	}
 	return fallback
 }
+func parseBool(val string, fallback bool) bool {
+	if len(val) == 0 {
+		return fallback
+	}
+	return strings.EqualFold(val, "yes") || strings.EqualFold(val, "ok") || strings.EqualFold(val, "true")
+}
 
-func makeStoreFactory(uri, db, username, password string) builder.DataStoreFactory {
+func makeStoreFactory(uri, db, username, password string, createIndexes bool) builder.DataStoreFactory {
 	if len(uri) == 0 || len(db) == 0 {
 		return builder.LocalStore()
 	}
-	return builder.Mongo(uri, db, username, password)
+	return builder.Mongo(uri, db, username, password, createIndexes)
 }
 
 func main() {
@@ -69,6 +76,7 @@ func main() {
 	mongodbDB := secrets.MustReadSecret("mongodb_db", "")
 	mongodbUsername := secrets.MustReadSecret("mongodb_username", "")
 	mongodbPassword := secrets.MustReadSecret("mongodb_password", "")
+	mongodbCreateIndexes := parseBool(secrets.MustReadSecret("mongodb_createindexes", "yes"), true)
 	snapshotMin := parseInt(os.Getenv("snapshot_min"), -1)
 	natsURI := secrets.MustReadSecret("nats_uri", "")
 	natsNS := secrets.MustReadSecret("nats_namespace", "")
@@ -84,7 +92,7 @@ func main() {
 		middleware = append(middleware, hydra.AuthHandlerOptional(hydraURL))
 	}
 
-	storeFactory := makeStoreFactory(mongodbURI, mongodbDB, mongodbUsername, mongodbPassword)
+	storeFactory := makeStoreFactory(mongodbURI, mongodbDB, mongodbUsername, mongodbPassword, mongodbCreateIndexes)
 	b, err := builder.NewClientBuilder(storeFactory)
 	if err != nil {
 		log.Fatalf("NewClientBuilder failed %v", err)
