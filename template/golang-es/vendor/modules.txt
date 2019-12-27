@@ -1,6 +1,6 @@
 # github.com/DataDog/zstd v1.4.4
 github.com/DataDog/zstd
-# github.com/contextgg/go-es v1.5.0
+# github.com/contextgg/go-es v1.5.1
 github.com/contextgg/go-es/builder
 github.com/contextgg/go-es/es
 github.com/contextgg/go-es/es/basic
