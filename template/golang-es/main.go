@@ -72,6 +72,7 @@ func main() {
 	readTimeout := parseIntOrDurationValue(os.Getenv("read_timeout"), 10*time.Second)
 	writeTimeout := parseIntOrDurationValue(os.Getenv("write_timeout"), 10*time.Second)
 
+	debug := parseBool(secrets.MustReadSecret("debug", "no"), true)
 	mongodbURI := secrets.MustReadSecret("mongodb_uri", "")
 	mongodbDB := secrets.MustReadSecret("mongodb_db", "")
 	mongodbUsername := secrets.MustReadSecret("mongodb_username", "")
@@ -99,6 +100,10 @@ func main() {
 		return
 	}
 	b.SetDefaultSnapshotMin(snapshotMin)
+
+	if debug {
+		b.SetDebug()
+	}
 
 	if len(natsURI) != 0 && len(natsNS) != 0 {
 		b.AddPublisher(
