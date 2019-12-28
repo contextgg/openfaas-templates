@@ -1,11 +1,16 @@
 # github.com/DataDog/zstd v1.4.4
 github.com/DataDog/zstd
 # github.com/contextgg/go-sdk v1.6.2
+github.com/contextgg/go-sdk/httpbuilder
+github.com/contextgg/go-sdk/hydra
 github.com/contextgg/go-sdk/secrets
 # github.com/go-stack/stack v1.8.0
 github.com/go-stack/stack
 # github.com/golang/snappy v0.0.1
 github.com/golang/snappy
+# github.com/opentracing/opentracing-go v1.1.0
+github.com/opentracing/opentracing-go
+github.com/opentracing/opentracing-go/log
 # github.com/pkg/errors v0.8.1
 github.com/pkg/errors
 # github.com/xdg/scram v0.0.0-20180814205039-7eeb5667e42c

@@ -9,6 +9,8 @@ import (
 	"strconv"
 	"time"
 
+	_ "github.com/contextgg/go-sdk/httpbuilder"
+	_ "github.com/contextgg/go-sdk/hydra"
 	"github.com/contextgg/go-sdk/secrets"
 
 	"go.mongodb.org/mongo-driver/mongo"

@@ -10,11 +10,11 @@ import (
 	"time"
 
 	"github.com/contextgg/go-es/builder"
+	_ "github.com/contextgg/go-sdk/httpbuilder"
 	"github.com/contextgg/go-sdk/hydra"
 	"github.com/contextgg/go-sdk/secrets"
 
 	"handler/function"
-	// "github.com/contextgg/openfaas-templates/template/golang-http-es/function"
 )
 
 // Middleware used to help auth
