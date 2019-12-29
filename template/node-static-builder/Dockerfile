@@ -1,47 +1,34 @@
-FROM node:12.8.0-alpine as builder
+FROM node:lts-alpine as builder
 
-RUN mkdir -p /home/app
+RUN mkdir -p /app
 
-WORKDIR /home/app
+WORKDIR /app
 
 COPY function/package.json ./
-COPY function/yarn.lock ./
-RUN yarn install
+COPY function/package*.json ./
+RUN npm install
 
 # COPY function files and folders
 COPY function/ ./
 
-RUN yarn build
+RUN npm run build
 
-FROM openfaas/of-watchdog:0.7.2 as watchdog
-FROM node:12.8.0-alpine as ship
+FROM openfaas/of-watchdog:0.7.4 as watchdog
+FROM nginx:stable
 
-RUN apk --no-cache add curl ca-certificates \
-    && addgroup -S app && adduser -S -g app app
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+RUN echo "daemon off;" >> /etc/nginx/nginx.conf
 
-# Turn down the verbosity to default level.
-ENV NPM_CONFIG_LOGLEVEL warn
+RUN mkdir -p /app
 
-RUN mkdir -p /home/app
+WORKDIR /app
 
-# Wrapper/boot-strapper
-WORKDIR /home/app
-
-# Add the serve
-RUN yarn global add serve
-
-COPY --from=builder /home/app/build /home/app/build
+COPY --from=builder /app/build /app/build
 COPY --from=watchdog /fwatchdog /usr/bin/fwatchdog
 RUN chmod +x /usr/bin/fwatchdog
 
-# chmod for tmp is for a buildkit issue (@alexellis)
-RUN chown app:app -R /home/app \
-    && chmod 777 /tmp
-
-USER app
-
 ENV cgi_headers="true"
-ENV fprocess="serve -s build"
+ENV fprocess="nginx"
 ENV mode="http"
 ENV upstream_url="http://127.0.0.1:5000"
 
