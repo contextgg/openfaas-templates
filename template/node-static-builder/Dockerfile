@@ -8,6 +8,8 @@ COPY function/package.json ./
 COPY function/package*.json ./
 RUN npm install
 
+FROM builder AS application
+
 # COPY function files and folders
 COPY function/ ./
 
@@ -23,7 +25,7 @@ RUN mkdir -p /app
 
 WORKDIR /app
 
-COPY --from=builder /app/build /app/build
+COPY --from=application /app/build /app/build
 COPY --from=watchdog /fwatchdog /usr/bin/fwatchdog
 RUN chmod +x /usr/bin/fwatchdog
 
