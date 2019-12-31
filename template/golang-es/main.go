@@ -11,6 +11,7 @@ import (
 
 	"github.com/contextgg/go-es/builder"
 	"github.com/contextgg/go-es/httputils"
+	_ "github.com/contextgg/go-sdk/autha"
 	"github.com/contextgg/go-sdk/hydra"
 	"github.com/contextgg/go-sdk/secrets"
 
