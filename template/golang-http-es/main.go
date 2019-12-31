@@ -10,10 +10,12 @@ import (
 	"time"
 
 	"github.com/contextgg/go-es/builder"
+	_ "github.com/contextgg/go-sdk/autha"
 	_ "github.com/contextgg/go-sdk/httpbuilder"
 	"github.com/contextgg/go-sdk/hydra"
 	"github.com/contextgg/go-sdk/secrets"
 
+	// github.com/contextcloud/templates/template/golang-http-es/function
 	"handler/function"
 )
 
