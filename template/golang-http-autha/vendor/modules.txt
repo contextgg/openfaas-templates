@@ -1,0 +1,44 @@
+# github.com/contextgg/go-sdk v1.6.3
+github.com/contextgg/go-sdk/autha
+github.com/contextgg/go-sdk/autha/faas
+github.com/contextgg/go-sdk/autha/providers/battlenet
+github.com/contextgg/go-sdk/autha/providers/discord
+github.com/contextgg/go-sdk/autha/providers/smashgg
+github.com/contextgg/go-sdk/autha/providers/steam
+github.com/contextgg/go-sdk/autha/providers/twitch
+github.com/contextgg/go-sdk/autha/providers/twitter
+github.com/contextgg/go-sdk/autha/stores
+github.com/contextgg/go-sdk/gen
+github.com/contextgg/go-sdk/httpbuilder
+github.com/contextgg/go-sdk/secrets
+# github.com/golang/protobuf v1.2.0
+github.com/golang/protobuf/proto
+# github.com/google/uuid v1.1.1
+github.com/google/uuid
+# github.com/gorilla/securecookie v1.1.1
+github.com/gorilla/securecookie
+# github.com/gorilla/sessions v1.2.0
+github.com/gorilla/sessions
+# github.com/mitchellh/mapstructure v1.1.2
+github.com/mitchellh/mapstructure
+# github.com/mrjones/oauth v0.0.0-20190623134757-126b35219450
+github.com/mrjones/oauth
+# github.com/opentracing/opentracing-go v1.1.0
+github.com/opentracing/opentracing-go
+github.com/opentracing/opentracing-go/log
+# github.com/pkg/errors v0.8.1
+github.com/pkg/errors
+# golang.org/x/net v0.0.0-20190404232315-eb5bcb51f2a3
+golang.org/x/net/context
+golang.org/x/net/context/ctxhttp
+# golang.org/x/oauth2 v0.0.0-20191202225959-858c2ad4c8b6
+golang.org/x/oauth2
+golang.org/x/oauth2/internal
+# google.golang.org/appengine v1.4.0
+google.golang.org/appengine/internal
+google.golang.org/appengine/internal/base
+google.golang.org/appengine/internal/datastore
+google.golang.org/appengine/internal/log
+google.golang.org/appengine/internal/remote_api
+google.golang.org/appengine/internal/urlfetch
+google.golang.org/appengine/urlfetch
