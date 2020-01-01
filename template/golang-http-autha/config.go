@@ -1,13 +1,13 @@
 package main
 
 import (
-	"fmt"
 	"errors"
+	"fmt"
 	"os"
+	"strconv"
 	"strings"
 	"time"
-	"strconv"
-	
+
 	"github.com/contextgg/go-sdk/secrets"
 )
 
@@ -46,18 +46,18 @@ func parseBool(val string, fallback bool) bool {
 
 // Config all the info for the app
 type Config struct {
-	ReadTimeout time.Duration
+	ReadTimeout  time.Duration
 	WriteTimeout time.Duration
 
-	Connection string
-	DNS string
-	SessionSecret string
-	SessionSecure bool
+	Connection       string
+	DNS              string
+	SessionSecret    string
+	SessionSecure    bool
 	UserFunctionName string
 
 	CallbackURL string
-	LoginURL string
-	ErrorURL string
+	LoginURL    string
+	ErrorURL    string
 }
 
 func (c *Config) Load() error {

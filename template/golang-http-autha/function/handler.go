@@ -14,11 +14,11 @@ func NewProvider(callbackURL string) autha.AuthProvider {
 // NewHandler for routing
 func NewHandler(auth *autha.Config) http.Handler {
 	mux := http.NewServeMux()
-	mux.HandleFunc("/", func (w http.ResponseWriter, r *http.Request) { 
-		auth.Begin(w, r) 
+	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		auth.Begin(w, r)
 	})
-	mux.HandleFunc("/callback", func (w http.ResponseWriter, r *http.Request) { 
-		auth.Callback(w, r) 
+	mux.HandleFunc("/callback", func(w http.ResponseWriter, r *http.Request) {
+		auth.Callback(w, r)
 	})
 	return mux
 }

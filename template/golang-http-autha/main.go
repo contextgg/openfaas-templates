@@ -1,14 +1,14 @@
 package main
 
 import (
-	"log"
 	"fmt"
+	"log"
 	"net/http"
 
 	"github.com/contextgg/go-sdk/autha"
 	"github.com/contextgg/go-sdk/autha/faas"
 	"github.com/contextgg/go-sdk/autha/stores"
-	
+
 	_ "github.com/contextgg/go-sdk/autha/providers/battlenet"
 	_ "github.com/contextgg/go-sdk/autha/providers/discord"
 	_ "github.com/contextgg/go-sdk/autha/providers/smashgg"
@@ -16,8 +16,8 @@ import (
 	_ "github.com/contextgg/go-sdk/autha/providers/twitch"
 	_ "github.com/contextgg/go-sdk/autha/providers/twitter"
 
-	// "handler/function"
-	"github.com/contextcloud/templates/template/golang-http-autha/function"
+	"handler/function"
+	// "github.com/contextcloud/templates/template/golang-http-autha/function"
 )
 
 func main() {
@@ -39,7 +39,7 @@ func main() {
 	auth := autha.NewConfig(cfg.Connection, cfg.LoginURL, cfg.ErrorURL, sessionStore, userStore, provider, userService)
 
 	handler := function.NewHandler(auth)
-	
+
 	s := &http.Server{
 		Handler:        handler,
 		Addr:           fmt.Sprintf(":%d", 8082),
