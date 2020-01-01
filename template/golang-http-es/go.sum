@@ -5,6 +5,8 @@ github.com/contextgg/go-es v1.5.2 h1:QAReac3EJpOCt9MeFxKB9uH2flvxjrScbU4pjGKSCtQ
 github.com/contextgg/go-es v1.5.2/go.mod h1:KC2wBJUvZANsasK0VYK9sK0oQTe7znZ6QH+OwwndnTQ=
 github.com/contextgg/go-es v1.5.3 h1:un27wh/tF7Seoff3Yayh8d/EJ5ZBgCJeefLRc1eEnB0=
 github.com/contextgg/go-es v1.5.3/go.mod h1:KC2wBJUvZANsasK0VYK9sK0oQTe7znZ6QH+OwwndnTQ=
+github.com/contextgg/go-es v1.5.5 h1:6ZQD4pNvwFBQH8tOvZx047AAgPuM9/8C7ThrDabiPxk=
+github.com/contextgg/go-es v1.5.5/go.mod h1:SWnUGc9Hc4jj8smc0Y+Dag6m+8NqJn2nuqUYlvrsGQA=
 github.com/contextgg/go-sdk v1.6.2 h1:edK/XgD2GuvwyYofZiOzR5TM5Bqy5vUZrB2aXguA3Uo=
 github.com/contextgg/go-sdk v1.6.2/go.mod h1:kZJdgq1BFtq6sh6br3SmTU4QY5x/jRKwPTVqV+/RBxI=
 github.com/coreos/go-systemd v0.0.0-20190321100706-95778dfbb74e/go.mod h1:F5haX7vjVVG0kc13fIWeqUViNPyEJxv/OmvnBo0Yme4=
