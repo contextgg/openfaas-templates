@@ -1,4 +1,4 @@
-# github.com/contextgg/go-sdk v1.6.4
+# github.com/contextgg/go-sdk v1.6.5
 github.com/contextgg/go-sdk/autha
 github.com/contextgg/go-sdk/autha/faas
 github.com/contextgg/go-sdk/autha/providers/battlenet

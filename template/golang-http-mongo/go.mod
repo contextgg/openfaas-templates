@@ -1,10 +1,12 @@
-module github.com/contextgg/openfaas-templates/template/golang-http-mongo
+module github.com/contextcloud/templates/template/golang-http-mongo
 
 go 1.13
 
+// replace github.com/contextcloud/templates/template/golang-http-mongo/function => ./handler/function
+
 require (
 	github.com/DataDog/zstd v1.4.4 // indirect
-	github.com/contextgg/go-sdk v1.6.2
+	github.com/contextgg/go-sdk v1.6.5
 	github.com/go-stack/stack v1.8.0 // indirect
 	github.com/golang/snappy v0.0.1 // indirect
 	github.com/google/go-cmp v0.3.1 // indirect

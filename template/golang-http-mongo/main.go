@@ -18,7 +18,6 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/readpref"
 
 	"handler/function"
-	// "github.com/contextgg/openfaas-templates/template/golang-http-mongo/function"
 )
 
 func parseIntOrDurationValue(val string, fallback time.Duration) time.Duration {

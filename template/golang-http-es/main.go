@@ -15,7 +15,6 @@ import (
 	"github.com/contextgg/go-sdk/hydra"
 	"github.com/contextgg/go-sdk/secrets"
 
-	// github.com/contextcloud/templates/template/golang-http-es/function
 	"handler/function"
 )
 

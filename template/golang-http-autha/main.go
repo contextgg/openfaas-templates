@@ -17,7 +17,6 @@ import (
 	_ "github.com/contextgg/go-sdk/autha/providers/twitter"
 
 	"handler/function"
-	// "github.com/contextcloud/templates/template/golang-http-autha/function"
 )
 
 func main() {

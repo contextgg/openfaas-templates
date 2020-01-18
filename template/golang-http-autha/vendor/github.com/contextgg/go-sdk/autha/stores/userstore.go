@@ -24,7 +24,17 @@ func (s *userStore) Save(userID string, w http.ResponseWriter, r *http.Request) 
 	}
 
 	sess.Values["id"] = userID
+	return sess.Save(r, w)
+}
 
+func (s *userStore) Remove(w http.ResponseWriter, r *http.Request) error {
+	// load up the session
+	sess, err := s.cookieStore.Get(r, userStoreKey)
+	if err != nil {
+		return err
+	}
+
+	sess.Options.MaxAge = -1
 	return sess.Save(r, w)
 }
 
