@@ -15,7 +15,7 @@ import (
 	"github.com/contextgg/go-sdk/hydra"
 	"github.com/contextgg/go-sdk/secrets"
 
-	"handler/function"
+	"./handler/function"
 )
 
 // Middleware used to help auth
@@ -81,6 +81,8 @@ func main() {
 	snapshotMin := parseInt(os.Getenv("snapshot_min"), -1)
 	natsURI := secrets.MustReadSecret("nats_uri", "")
 	natsNS := secrets.MustReadSecret("nats_namespace", "")
+	gcpProjectID := secrets.MustReadSecret("gcp_projectid", "")
+	gcpTopic := secrets.MustReadSecret("gcp_topic", "")
 
 	creds := secrets.LoadBasicAuth("auth")
 	hydraURL := secrets.MustReadSecret("hydra_url", "")
@@ -108,6 +110,11 @@ func main() {
 	if len(natsURI) != 0 && len(natsNS) != 0 {
 		b.AddPublisher(
 			builder.Nats(natsURI, natsNS),
+		)
+	}
+	if len(gcpProjectID) != 0 && len(gcpTopic) != 0 {
+		b.AddPublisher(
+			builder.GCPPubSub(gcpProjectID, gcpTopic),
 		)
 	}
 
