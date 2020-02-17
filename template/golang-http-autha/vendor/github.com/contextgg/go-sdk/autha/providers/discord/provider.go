@@ -71,9 +71,10 @@ type Webhook struct {
 }
 
 type Guild struct {
-	ID   string  `json:"id"`
-	Name string  `json:"name"`
-	Icon *string `json:"icon"`
+	ID      string `json:"id"`
+	Name    string `json:"name"`
+	Icon    string `json:"icon"`
+	OwnerID string `json:"owner_id" mapstructure:"owner_id"`
 }
 
 // Token struct
@@ -101,11 +102,17 @@ type Token struct {
 	// Webhook extra information
 	Webhook *Webhook `json:"webhook,omitempty"`
 
+	// Guild extra information
+	Guild *Guild `json:"guild,omitempty"`
+
 	// GuildID only used when bot
 	GuildID string `json:"guild_id,omitempty"`
 
 	// Permissions only used when bot
 	Permissions string `json:"permissions,omitempty"`
+
+	// Error when things have errors
+	Error error `json:"-"`
 }
 
 func convertToken(tk *oauth2.Token, params autha.Params) *Token {
@@ -127,6 +134,18 @@ func convertToken(tk *oauth2.Token, params autha.Params) *Token {
 		var result Webhook
 		if err := mapstructure.Decode(wh, &result); err == nil {
 			t.Webhook = &result
+		} else {
+			t.Error = err
+		}
+	}
+
+	g := tk.Extra("guild")
+	if g != nil {
+		var result Guild
+		if err := mapstructure.Decode(g, &result); err == nil {
+			t.Guild = &result
+		} else {
+			t.Error = err
 		}
 	}
 
@@ -203,7 +222,7 @@ func (p *provider) LoadProfile(ctx context.Context, token autha.Token, session a
 	switch {
 	case t.Webhook != nil:
 		return webhookProfile(ctx, t)
-	case len(t.GuildID) > 0:
+	case t.Guild != nil:
 		return botProfile(ctx, t)
 	default:
 		return userProfile(ctx, t)
@@ -226,35 +245,17 @@ func webhookProfile(ctx context.Context, t *Token) (*autha.Profile, error) {
 	return profile, nil
 }
 func botProfile(ctx context.Context, t *Token) (*autha.Profile, error) {
-	authType := t.TokenType
-	accessToken := t.AccessToken
-
-	// todo get the user!
-	var guild Guild
-	status, err := httpbuilder.New().
-		SetURL(guildsEndpoint).
-		AppendPath(t.GuildID).
-		SetAuthToken(authType, accessToken).
-		SetOut(&guild).
-		Do(ctx)
-	if err != nil {
-		return nil, err
-	}
-	if status != http.StatusOK {
-		return nil, fmt.Errorf("Invalid Status Code %d", status)
-	}
-
 	avatarURL := ""
-	if guild.Icon != nil {
-		avatarURL = fmt.Sprintf("https://cdn.discordapp.com/icons/%s/%s.jpg?size=512", guild.ID, *guild.Icon)
+	if len(t.Guild.Icon) > 0 {
+		avatarURL = fmt.Sprintf("https://cdn.discordapp.com/icons/%s/%s.jpg?size=512", t.Guild.ID, t.Guild.Icon)
 	}
 
 	profile := &autha.Profile{
-		ID:          guild.ID,
-		Username:    guild.ID,
-		DisplayName: guild.Name,
+		ID:          t.Guild.ID,
+		Username:    t.Guild.ID,
+		DisplayName: t.Guild.Name,
 		AvatarURL:   avatarURL,
-		Raw:         guild,
+		Raw:         t.Guild,
 	}
 	return profile, nil
 }
