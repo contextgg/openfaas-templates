@@ -17,9 +17,10 @@ import (
 )
 
 const (
-	authURL      = "https://discordapp.com/api/oauth2/authorize"
-	tokenURL     = "https://discordapp.com/api/oauth2/token"
-	userEndpoint = "https://discordapp.com/api/users/@me"
+	authURL        = "https://discordapp.com/api/oauth2/authorize"
+	tokenURL       = "https://discordapp.com/api/oauth2/token"
+	userEndpoint   = "https://discordapp.com/api/users/@me"
+	guildsEndpoint = "https://discordapp.com/api/guilds"
 )
 
 const (
@@ -67,6 +68,12 @@ type Webhook struct {
 	Type      *int              `json:"type,omitempty"`
 	URL       string            `json:"url,omitempty"`
 	Extra     map[string]string `json:"extra,omitempty"`
+}
+
+type Guild struct {
+	ID   string  `json:"id"`
+	Name string  `json:"name"`
+	Icon *string `json:"icon"`
 }
 
 // Token struct
@@ -193,6 +200,65 @@ func (p *provider) LoadProfile(ctx context.Context, token autha.Token, session a
 		return nil, errors.New("Wrong token type")
 	}
 
+	switch {
+	case t.Webhook != nil:
+		return webhookProfile(ctx, t)
+	case len(t.GuildID) > 0:
+		return botProfile(ctx, t)
+	default:
+		return userProfile(ctx, t)
+	}
+}
+
+func webhookProfile(ctx context.Context, t *Token) (*autha.Profile, error) {
+	avatarURL := ""
+	if len(t.Webhook.Avatar) > 0 {
+		avatarURL = fmt.Sprintf("https://cdn.discordapp.com/avatars/%s/%s.jpg?size=512", t.Webhook.ID, t.Webhook.Avatar)
+	}
+
+	profile := &autha.Profile{
+		ID:          fmt.Sprintf("%s-%s", t.Webhook.GuildID, t.Webhook.ChannelID),
+		Username:    t.Webhook.ID,
+		DisplayName: t.Webhook.Name,
+		AvatarURL:   avatarURL,
+		Raw:         t.Webhook,
+	}
+	return profile, nil
+}
+func botProfile(ctx context.Context, t *Token) (*autha.Profile, error) {
+	authType := t.TokenType
+	accessToken := t.AccessToken
+
+	// todo get the user!
+	var guild Guild
+	status, err := httpbuilder.New().
+		SetURL(guildsEndpoint).
+		AppendPath(t.GuildID).
+		SetAuthToken(authType, accessToken).
+		SetOut(&guild).
+		Do(ctx)
+	if err != nil {
+		return nil, err
+	}
+	if status != http.StatusOK {
+		return nil, fmt.Errorf("Invalid Status Code %d", status)
+	}
+
+	avatarURL := ""
+	if guild.Icon != nil {
+		avatarURL = fmt.Sprintf("https://cdn.discordapp.com/icons/%s/%s.jpg?size=512", guild.ID, *guild.Icon)
+	}
+
+	profile := &autha.Profile{
+		ID:          guild.ID,
+		Username:    guild.ID,
+		DisplayName: guild.Name,
+		AvatarURL:   avatarURL,
+		Raw:         guild,
+	}
+	return profile, nil
+}
+func userProfile(ctx context.Context, t *Token) (*autha.Profile, error) {
 	authType := t.TokenType
 	accessToken := t.AccessToken
 
@@ -215,7 +281,7 @@ func (p *provider) LoadProfile(ctx context.Context, token autha.Token, session a
 		avatarURL = fmt.Sprintf("https://cdn.discordapp.com/avatars/%s/%s.jpg?size=512", user.ID, *user.Avatar)
 	}
 
-	id := &autha.Profile{
+	profile := &autha.Profile{
 		ID:          user.ID,
 		Username:    fmt.Sprintf("%s#%s", user.Username, user.Discriminator),
 		Email:       user.Email,
@@ -223,7 +289,7 @@ func (p *provider) LoadProfile(ctx context.Context, token autha.Token, session a
 		AvatarURL:   avatarURL,
 		Raw:         user,
 	}
-	return id, nil
+	return profile, nil
 }
 
 // NewProvider creates a new Provider

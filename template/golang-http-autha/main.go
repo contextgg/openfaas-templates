@@ -5,6 +5,7 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/contextcloud/templates/template/golang-http-autha/function"
 	"github.com/contextgg/go-sdk/autha"
 	"github.com/contextgg/go-sdk/autha/faas"
 	"github.com/contextgg/go-sdk/autha/stores"
