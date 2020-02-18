@@ -219,45 +219,53 @@ func (p *provider) LoadProfile(ctx context.Context, token autha.Token, session a
 		return nil, errors.New("Wrong token type")
 	}
 
-	switch {
-	case t.Webhook != nil:
-		return webhookProfile(ctx, t)
-	case t.Guild != nil:
-		return botProfile(ctx, t)
-	default:
-		return userProfile(ctx, t)
+	profile, err := userProfile(ctx, t)
+	if err != nil {
+		return nil, err
 	}
+
+	if t.Webhook != nil {
+		return webhookProfile(ctx, t, profile)
+	}
+
+	if t.Guild != nil {
+		return botProfile(ctx, t, profile)
+	}
+
+	return profile, nil
 }
 
-func webhookProfile(ctx context.Context, t *Token) (*autha.Profile, error) {
+func webhookProfile(ctx context.Context, t *Token, profile *autha.Profile) (*autha.Profile, error) {
 	avatarURL := ""
 	if len(t.Webhook.Avatar) > 0 {
 		avatarURL = fmt.Sprintf("https://cdn.discordapp.com/avatars/%s/%s.jpg?size=512", t.Webhook.ID, t.Webhook.Avatar)
 	}
 
-	profile := &autha.Profile{
-		ID:          fmt.Sprintf("%s-%s", t.Webhook.GuildID, t.Webhook.ChannelID),
+	wp := &autha.Profile{
+		ID:          fmt.Sprintf("%s-%s-%s", profile.ID, t.Webhook.GuildID, t.Webhook.ChannelID),
+		Type:        "Webhook",
 		Username:    t.Webhook.ID,
 		DisplayName: t.Webhook.Name,
 		AvatarURL:   avatarURL,
 		Raw:         t.Webhook,
 	}
-	return profile, nil
+	return wp, nil
 }
-func botProfile(ctx context.Context, t *Token) (*autha.Profile, error) {
+func botProfile(ctx context.Context, t *Token, profile *autha.Profile) (*autha.Profile, error) {
 	avatarURL := ""
 	if len(t.Guild.Icon) > 0 {
 		avatarURL = fmt.Sprintf("https://cdn.discordapp.com/icons/%s/%s.jpg?size=512", t.Guild.ID, t.Guild.Icon)
 	}
 
-	profile := &autha.Profile{
-		ID:          t.Guild.ID,
+	bp := &autha.Profile{
+		ID:          fmt.Sprintf("%s-%s", profile.ID, t.Guild.ID),
+		Type:        "Bot",
 		Username:    t.Guild.ID,
 		DisplayName: t.Guild.Name,
 		AvatarURL:   avatarURL,
 		Raw:         t.Guild,
 	}
-	return profile, nil
+	return bp, nil
 }
 func userProfile(ctx context.Context, t *Token) (*autha.Profile, error) {
 	authType := t.TokenType
