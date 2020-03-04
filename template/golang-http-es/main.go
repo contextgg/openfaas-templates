@@ -79,6 +79,8 @@ func main() {
 	mongodbPassword := secrets.MustReadSecret("mongodb_password", "")
 	mongodbCreateIndexes := parseBool(secrets.MustReadSecret("mongodb_createindexes", "yes"), true)
 	snapshotMin := parseInt(os.Getenv("snapshot_min"), -1)
+	revision := os.Getenv("revision")
+	project := parseBool(os.Getenv("project"), true)
 	natsURI := secrets.MustReadSecret("nats_uri", "")
 	natsNS := secrets.MustReadSecret("nats_namespace", "")
 	gcpProjectID := secrets.MustReadSecret("gcp_projectid", "")
@@ -102,6 +104,8 @@ func main() {
 		return
 	}
 	b.SetDefaultSnapshotMin(snapshotMin)
+	b.SetDefaultRevision(revision)
+	b.SetDefaultProject(project)
 
 	if debug {
 		b.SetDebug()
