@@ -15,7 +15,7 @@ import (
 	"github.com/contextgg/go-sdk/hydra"
 	"github.com/contextgg/go-sdk/secrets"
 
-	"handler/function"
+	"./handler/function"
 )
 
 // Middleware used to help auth
