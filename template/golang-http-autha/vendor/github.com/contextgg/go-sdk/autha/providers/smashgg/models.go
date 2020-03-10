@@ -65,17 +65,45 @@ type Image struct {
 	URL    string    `json:"url"`
 }
 
+// Address in smashgg
+type Address struct {
+	ID      SmashggID `json:"id"`
+	City    string    `json:"city"`
+	State   string    `json:"state"`
+	Country string    `json:"country"`
+}
+
+type Stream struct {
+	ID       SmashggID `json:"id"`
+	Name     string    `json:"name"`
+	Type     string    `json:"type"`
+	IsOnline bool      `json:"isOnline"`
+}
+
+// Authorization in smashgg
+type Authorization struct {
+	ID               SmashggID `json:"id"`
+	ExternalUsername string    `json:"externalUsername"`
+	Type             string    `json:"type"`
+	URL              string    `json:"url"`
+	Stream           *Stream   `json:"stream"`
+}
+
 // Player in smashgg
 type Player struct {
-	ID            SmashggID `json:"id"`
-	Images        []*Image  `json:"images"`
-	Prefix        string    `json:"prefix"`
-	GamerTag      string    `json:"gamerTag"`
-	Color         string    `json:"color"`
-	TwitchStream  string    `json:"twitchStream"`
-	TwitterHandle string    `json:"twitterHandle"`
-	YouTube       string    `json:"youtube"`
-	Region        string    `json:"region"`
-	State         string    `json:"state"`
-	Country       string    `json:"country"`
+	ID       SmashggID `json:"id"`
+	Prefix   string    `json:"prefix"`
+	GamerTag string    `json:"gamerTag"`
+}
+
+// User in smashgg
+type User struct {
+	ID             SmashggID       `json:"id"`
+	Images         []*Image        `json:"images"`
+	Bio            string          `json:"bio"`
+	Name           string          `json:"name"`
+	Slug           string          `json:"slug"`
+	Player         Player          `json:"player"`
+	Location       Address         `json:"location"`
+	Authorizations []Authorization `json:"authorizations"`
 }

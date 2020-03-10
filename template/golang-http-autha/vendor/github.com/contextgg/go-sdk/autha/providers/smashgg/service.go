@@ -22,25 +22,53 @@ fragment ImageParts on Image {
 	isOriginal
 }
 fragment PlayerParts on Player {
-	images {
-	  ...ImageParts
-	}
 	id
 	prefix
 	gamerTag
-	color
-	twitchStream
-	twitterHandle
-	youtube
-	region
-	state
-	country
-	nameDisplay
-	gamerTagChangedAt
+}
+fragment AddressParts on Address {
+  id
+  city
+  state
+  stateId
+  country
+  countryId
+}
+fragment UserParts on User {
+	id
+  images {
+    ...ImageParts
+  }
+  bio
+  name
+  slug
+  player {
+    ...PlayerParts
+  }
+  location {
+    ...AddressParts
+  }
+  authorizations {
+    id
+    externalUsername
+    type
+    stream {
+      id
+      isOnline
+      name
+      type
+    }
+    url
+  }
 }
 query PlayerQuery($id: ID!) {
 	player(id: $id){
 		...PlayerParts
+	}
+}
+query UserQuery($id: ID) {
+	user(id: $id){
+		...UserParts
 	}
 }
 `
@@ -79,6 +107,25 @@ func (s *Service) GetPlayer(ctx context.Context, id int) (*Player, error) {
 		return nil, err
 	}
 	return w.Player, nil
+}
+
+// GetUser by ID
+func (s *Service) GetUser(ctx context.Context, id int) (*User, error) {
+	body := &GraphQLRequest{
+		OperationName: "UserQuery",
+		Query:         queries,
+		Variables: map[string]interface{}{
+			"id": id,
+		},
+	}
+
+	w := struct {
+		User *User `json:"user"`
+	}{}
+	if err := s.do(ctx, body, &w); err != nil {
+		return nil, err
+	}
+	return w.User, nil
 }
 
 func (s *Service) getKey() string {

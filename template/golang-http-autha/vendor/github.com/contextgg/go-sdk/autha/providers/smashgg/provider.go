@@ -14,7 +14,7 @@ import (
 
 // Token struct
 type Token struct {
-	Player *Player `json:"-"`
+	User *User `json:"-"`
 }
 
 var (
@@ -51,16 +51,16 @@ func (p *provider) Name() string {
 }
 
 func (p *provider) BeginAuth(ctx context.Context, session autha.Session, params autha.Params) (string, error) {
-	playerID := params.Get("playerID")
-	if playerID == "" {
-		return "", errors.New("We require a player id")
+	userID := params.Get("userID")
+	if userID == "" {
+		return "", errors.New("We require a SmashGG user id")
 	}
 
 	// state for the oauth grant!
 	code := randSeq(6)
 
 	// set the state
-	session.Set("state", fmt.Sprintf("%s/%s", playerID, code))
+	session.Set("state", fmt.Sprintf("%s/%s", userID, code))
 
 	// returning no url won't redirect the page
 	return "", nil
@@ -80,22 +80,23 @@ func (p *provider) Authorize(ctx context.Context, session autha.Session, params 
 		return nil, fmt.Errorf("State has invalid value of %s", state)
 	}
 
-	playerID, err := strconv.Atoi(split[0])
+	userID, err := strconv.Atoi(split[0])
 	if err != nil {
-		return nil, fmt.Errorf("Could not parse player %w", err)
+		return nil, fmt.Errorf("Could not parse userID %w", err)
 	}
 
-	player, err := p.service.GetPlayer(ctx, playerID)
+	user, err := p.service.GetUser(ctx, userID)
 	if err != nil {
-		return nil, fmt.Errorf("Could not find player %w", err)
+		return nil, fmt.Errorf("Could not find user %w", err)
 	}
 
-	if player.Prefix != split[1] {
-		return nil, fmt.Errorf("Invalid prefix for player %d; got %s, want %s", playerID, player.Prefix, split[1])
+	prefix := user.Player.Prefix
+	if prefix != split[1] {
+		return nil, fmt.Errorf("Invalid prefix for user %d; got %s, want %s", userID, prefix, split[1])
 	}
 
 	// convert to a discord token!
-	return &Token{player}, nil
+	return &Token{user}, nil
 }
 
 func (p *provider) LoadProfile(ctx context.Context, token autha.Token, session autha.Session) (*autha.Profile, error) {
@@ -105,11 +106,11 @@ func (p *provider) LoadProfile(ctx context.Context, token autha.Token, session a
 	}
 
 	id := &autha.Profile{
-		ID:          strconv.Itoa(int(t.Player.ID)),
-		Username:    fmt.Sprintf("%s#%s", t.Player.GamerTag, t.Player.Prefix),
-		DisplayName: t.Player.GamerTag,
-		AvatarURL:   getAvatar("profile", t.Player.Images),
-		Raw:         t.Player,
+		ID:          strconv.Itoa(int(t.User.ID)),
+		Username:    t.User.Slug,
+		DisplayName: t.User.Player.GamerTag,
+		AvatarURL:   getAvatar("profile", t.User.Images),
+		Raw:         t.User,
 	}
 	return id, nil
 }
