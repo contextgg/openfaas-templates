@@ -1,4 +1,4 @@
-# github.com/contextgg/go-sdk v1.6.9
+# github.com/contextgg/go-sdk v1.6.10
 github.com/contextgg/go-sdk/autha
 github.com/contextgg/go-sdk/autha/faas
 github.com/contextgg/go-sdk/autha/providers/battlenet
@@ -26,8 +26,6 @@ github.com/mrjones/oauth
 # github.com/opentracing/opentracing-go v1.1.0
 github.com/opentracing/opentracing-go
 github.com/opentracing/opentracing-go/log
-# github.com/pkg/errors v0.8.1
-github.com/pkg/errors
 # golang.org/x/net v0.0.0-20190404232315-eb5bcb51f2a3
 golang.org/x/net/context
 golang.org/x/net/context/ctxhttp

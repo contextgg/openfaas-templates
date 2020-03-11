@@ -6,8 +6,6 @@ import (
 	"net/http"
 	"sync"
 
-	"github.com/pkg/errors"
-
 	"github.com/contextgg/go-sdk/httpbuilder"
 )
 
@@ -19,7 +17,6 @@ fragment ImageParts on Image {
 	ratio
 	type
 	url
-	isOriginal
 }
 fragment PlayerParts on Player {
 	id
@@ -173,7 +170,7 @@ func (s *Service) do(ctx context.Context, req *GraphQLRequest, data interface{})
 		return res.Errors[0]
 	}
 	if status != http.StatusOK {
-		return errors.Errorf("FAILED: status code %d extra info %s", status, errorString)
+		return fmt.Errorf("FAILED: status code %d extra info %s", status, errorString)
 	}
 
 	return nil

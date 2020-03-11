@@ -13,6 +13,8 @@ github.com/contextgg/go-sdk v1.6.8 h1:ndH3u6eRPoSfeG85LR4pfoNvakYjWBxcaS8QPdGThu
 github.com/contextgg/go-sdk v1.6.8/go.mod h1:kZJdgq1BFtq6sh6br3SmTU4QY5x/jRKwPTVqV+/RBxI=
 github.com/contextgg/go-sdk v1.6.9 h1:tosgNSjj1E+F94668YbActI+lS3XX5ybLCp5GCbzTWs=
 github.com/contextgg/go-sdk v1.6.9/go.mod h1:kZJdgq1BFtq6sh6br3SmTU4QY5x/jRKwPTVqV+/RBxI=
+github.com/contextgg/go-sdk v1.6.10 h1:MCrTASW+f2TEzjTPm27Psregj7mu8R0KL5i7AtVtO18=
+github.com/contextgg/go-sdk v1.6.10/go.mod h1:kZJdgq1BFtq6sh6br3SmTU4QY5x/jRKwPTVqV+/RBxI=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/golang/protobuf v1.2.0 h1:P3YflyNX/ehuJFLhxviNdFxQPkGK5cDcApsge1SqnvM=
 github.com/golang/protobuf v1.2.0/go.mod h1:6lQm79b+lXiMfvg/cZm0SGofjICqVBUtrP5yJMmIC1U=
