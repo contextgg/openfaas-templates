@@ -75,7 +75,13 @@ func (p *provider) Authorize(ctx context.Context, session autha.Session, params 
 		return nil, errors.New("No state value in params")
 	}
 
-	user, err := p.service.GetUserByURL(ctx, userURL)
+	// extract the slug.
+	slug, err := extractSlug(userURL)
+	if err != nil {
+		return nil, autha.NewWrapped(fmt.Sprintf("Invalid Smashgg URL %s", userURL), autha.ErrTryAgain)
+	}
+
+	user, err := p.service.GetUserBySlug(ctx, slug)
 	if err != nil {
 		return nil, fmt.Errorf("Could not find user %w", err)
 	}

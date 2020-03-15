@@ -63,7 +63,7 @@ query PlayerQuery($id: ID!) {
 		...PlayerParts
 	}
 }
-query UserQuery($slug: string) {
+query UserQuery($slug: String!) {
 	user(slug: $slug){
 		...UserParts
 	}
@@ -107,13 +107,7 @@ func (s *Service) GetPlayer(ctx context.Context, id int) (*Player, error) {
 }
 
 // GetUserByURL get user by profile user
-func (s *Service) GetUserByURL(ctx context.Context, url string) (*User, error) {
-	// extract the slug.
-	slug, err := extractSlug(url)
-	if err != nil {
-		return nil, err
-	}
-
+func (s *Service) GetUserBySlug(ctx context.Context, slug string) (*User, error) {
 	body := &GraphQLRequest{
 		OperationName: "UserQuery",
 		Query:         queries,
