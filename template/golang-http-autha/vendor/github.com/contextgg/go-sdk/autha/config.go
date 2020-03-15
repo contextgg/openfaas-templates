@@ -1,6 +1,7 @@
 package autha
 
 import (
+	"errors"
 	"fmt"
 	"log"
 	"net/http"
@@ -132,7 +133,12 @@ func (c *Config) Callback(w http.ResponseWriter, r *http.Request) Session {
 		return nil
 	}
 
-	token, err := c.authProvider.Authorize(ctx, session, r.URL.Query())
+	r.ParseForm()
+	token, err := c.authProvider.Authorize(ctx, session, r.Form)
+	if err != nil && errors.Is(err, ErrTryAgain) {
+		session.Set("message", err.Error())
+		return session
+	}
 	if err != nil {
 		http.Redirect(w, r, c.fullErrorURL("id"), http.StatusFound)
 		log.Print(fmt.Errorf("Error Authorize: %w", err))

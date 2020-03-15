@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"math/rand"
 	"strconv"
-	"strings"
 	"time"
 
 	"github.com/contextgg/go-sdk/autha"
@@ -44,6 +43,7 @@ func getAvatar(name string, images []*Image) string {
 
 type provider struct {
 	service *Service
+	useBio  bool
 }
 
 func (p *provider) Name() string {
@@ -51,16 +51,11 @@ func (p *provider) Name() string {
 }
 
 func (p *provider) BeginAuth(ctx context.Context, session autha.Session, params autha.Params) (string, error) {
-	userID := params.Get("userID")
-	if userID == "" {
-		return "", errors.New("We require a SmashGG user id")
-	}
-
 	// state for the oauth grant!
 	code := randSeq(6)
 
 	// set the state
-	session.Set("state", fmt.Sprintf("%s/%s", userID, code))
+	session.Set("state", code)
 
 	// returning no url won't redirect the page
 	return "", nil
@@ -75,24 +70,22 @@ func (p *provider) Authorize(ctx context.Context, session autha.Session, params 
 		return nil, errors.New("No state value in params")
 	}
 
-	split := strings.Split(state, "/")
-	if len(split) != 2 {
-		return nil, fmt.Errorf("State has invalid value of %s", state)
+	userURL := params.Get("user-url")
+	if len(userURL) == 0 {
+		return nil, errors.New("No state value in params")
 	}
 
-	userID, err := strconv.Atoi(split[0])
-	if err != nil {
-		return nil, fmt.Errorf("Could not parse userID %w", err)
-	}
-
-	user, err := p.service.GetUser(ctx, userID)
+	user, err := p.service.GetUserByURL(ctx, userURL)
 	if err != nil {
 		return nil, fmt.Errorf("Could not find user %w", err)
 	}
 
-	prefix := user.Player.Prefix
-	if prefix != split[1] {
-		return nil, fmt.Errorf("Invalid prefix for user %d; got %s, want %s", userID, prefix, split[1])
+	if p.useBio && user.Bio != state {
+		return nil, autha.NewWrapped(fmt.Sprintf("Invalid Bio for url %s; got %s, want %s", userURL, user.Bio, state), autha.ErrTryAgain)
+	}
+
+	if !p.useBio && user.Player.Prefix != state {
+		return nil, autha.NewWrapped(fmt.Sprintf("Invalid Prefix for url %s; got %s, want %s", userURL, user.Player.Prefix, state), autha.ErrTryAgain)
 	}
 
 	// convert to a discord token!
@@ -116,8 +109,9 @@ func (p *provider) LoadProfile(ctx context.Context, token autha.Token, session a
 }
 
 // NewProvider creates a new Provider
-func NewProvider(accessToken []string) autha.AuthProvider {
+func NewProvider(accessToken []string, useBio bool) autha.AuthProvider {
 	return &provider{
 		service: NewService(accessToken...),
+		useBio:  useBio,
 	}
 }
