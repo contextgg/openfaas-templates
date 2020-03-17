@@ -77,7 +77,7 @@ func (p *provider) Authorize(ctx context.Context, session autha.Session, params 
 
 	userURL := params.Get("user-url")
 	if len(userURL) == 0 {
-		return nil, autha.NewWrapped("Please provider a Smashgg profile URL", autha.ErrTryAgain)
+		return nil, autha.NewWrapped("Please provide a Smashgg profile URL", autha.ErrTryAgain)
 	}
 
 	// extract the slug.
