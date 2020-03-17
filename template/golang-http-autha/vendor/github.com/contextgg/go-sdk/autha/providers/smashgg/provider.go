@@ -51,11 +51,16 @@ func (p *provider) Name() string {
 }
 
 func (p *provider) BeginAuth(ctx context.Context, session autha.Session, params autha.Params) (string, error) {
-	// state for the oauth grant!
-	code := randSeq(6)
+	// if we already have a state don't regenerate.
+	// sessions only last 12 hours by default
+	code, _ := session.Get("state")
+	if len(code) == 0 {
+		// state for the oauth grant!
+		code := randSeq(6)
 
-	// set the state
-	session.Set("state", code)
+		// set the state
+		session.Set("state", code)
+	}
 
 	// returning no url won't redirect the page
 	return "", nil
@@ -72,7 +77,7 @@ func (p *provider) Authorize(ctx context.Context, session autha.Session, params 
 
 	userURL := params.Get("user-url")
 	if len(userURL) == 0 {
-		return nil, errors.New("No state value in params")
+		return nil, autha.NewWrapped("Please provider a Smashgg profile URL", autha.ErrTryAgain)
 	}
 
 	// extract the slug.
@@ -83,7 +88,7 @@ func (p *provider) Authorize(ctx context.Context, session autha.Session, params 
 
 	user, err := p.service.GetUserBySlug(ctx, slug)
 	if err != nil {
-		return nil, fmt.Errorf("Could not find user %w", err)
+		return nil, autha.NewWrapped(fmt.Sprintf("Whoops, please try again later - %v", err), autha.ErrTryAgain)
 	}
 
 	if p.useBio && user.Bio != state {
