@@ -5,6 +5,7 @@ RUN mkdir -p /app
 
 WORKDIR /app
 
+ENV NODE_ENV=production
 RUN npm install pm2@latest -g
 
 COPY function/package.json ./
