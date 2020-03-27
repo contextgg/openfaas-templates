@@ -5,7 +5,7 @@ go 1.13
 // replace github.com/contextcloud/templates/template/golang-http-es/function => ./handler/function
 
 require (
-	github.com/contextgg/go-es v1.7.3
+	github.com/contextgg/go-es v1.7.4
 	github.com/contextgg/go-sdk v1.6.16
 	github.com/google/go-cmp v0.3.1 // indirect
 	github.com/gorilla/mux v1.7.4 // indirect
