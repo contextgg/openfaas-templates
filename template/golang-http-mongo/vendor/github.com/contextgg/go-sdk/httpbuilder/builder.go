@@ -35,6 +35,9 @@ type HTTPBuilder interface {
 	// SetBody is the input of the command
 	SetBody(interface{}) HTTPBuilder
 
+	// SetNoBody will force no content
+	SetNoBody() HTTPBuilder
+
 	// AppendPath will append the the URL set
 	AppendPath(string) HTTPBuilder
 
@@ -76,6 +79,7 @@ type httpBuilder struct {
 	headers     map[string]string
 	queries     map[string]string
 	body        interface{}
+	nobody      bool
 	logger      func(string, ...interface{})
 	out         interface{}
 	errorString *string
@@ -139,6 +143,10 @@ func (b *httpBuilder) SetLogger(logger func(string, ...interface{})) HTTPBuilder
 
 func (b *httpBuilder) SetBody(body interface{}) HTTPBuilder {
 	b.body = body
+	return b
+}
+func (b *httpBuilder) SetNoBody() HTTPBuilder {
+	b.nobody = true
 	return b
 }
 
@@ -234,7 +242,7 @@ func (b *httpBuilder) Do(ctx context.Context) (int, error) {
 	defer res.Body.Close()
 
 	if res.StatusCode >= 400 {
-		if b.errorString != nil {
+		if !b.nobody && b.errorString != nil {
 			// get the body!.
 			bodyBytes, err := ioutil.ReadAll(res.Body)
 			if err != nil {
@@ -251,7 +259,7 @@ func (b *httpBuilder) Do(ctx context.Context) (int, error) {
 	}
 
 	// If we have an output decode it
-	if b.out != nil {
+	if !b.nobody && b.out != nil {
 		switch out := b.out.(type) {
 		case io.Writer:
 			_, err := io.Copy(out, res.Body)

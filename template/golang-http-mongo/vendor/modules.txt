@@ -1,6 +1,6 @@
 # github.com/DataDog/zstd v1.4.4
 github.com/DataDog/zstd
-# github.com/contextgg/go-sdk v1.6.5
+# github.com/contextgg/go-sdk v1.6.16
 github.com/contextgg/go-sdk/httpbuilder
 github.com/contextgg/go-sdk/hydra
 github.com/contextgg/go-sdk/secrets
