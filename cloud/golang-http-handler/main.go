@@ -1,21 +1,24 @@
 package main
 
 import (
-	"handler/function"
 	"log"
 	"net/http"
 	"os"
 	"os/signal"
 	"syscall"
 
+	"github.com/heptiolabs/healthcheck"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	metrics "github.com/slok/go-http-metrics/metrics/prometheus"
 	"github.com/slok/go-http-metrics/middleware"
+
+	"handler/function"
 )
 
 const (
 	srvAddr     = ":8080"
 	metricsAddr = ":8081"
+	healthAddr  = ":8082"
 )
 
 // this example will show the simplest way of enabling the middleware
@@ -40,7 +43,6 @@ func main() {
 
 	// Serve our handler.
 	go func() {
-		log.Printf("server listening at %s", srvAddr)
 		if err := http.ListenAndServe(srvAddr, h); err != nil {
 			log.Panicf("error while serving: %s", err)
 		}
@@ -48,9 +50,18 @@ func main() {
 
 	// Serve our metrics.
 	go func() {
-		log.Printf("metrics listening at %s", metricsAddr)
 		if err := http.ListenAndServe(metricsAddr, promhttp.Handler()); err != nil {
 			log.Panicf("error while serving metrics: %s", err)
+		}
+	}()
+
+	health := healthcheck.NewHandler()
+	health.AddLivenessCheck("goroutine-threshold", healthcheck.GoroutineCountCheck(100))
+
+	// Serve our health.
+	go func() {
+		if err := http.ListenAndServe(healthAddr, health); err != nil {
+			log.Panicf("error while serving health: %s", err)
 		}
 	}()
 

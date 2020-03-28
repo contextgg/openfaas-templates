@@ -22,9 +22,6 @@ RUN apk --no-cache add ca-certificates \
 WORKDIR /home/app
 
 COPY --from=build /go/src/handler/handler    .
-COPY --from=watchdog /fwatchdog              .
-
-RUN chmod +x ./fwatchdog
 
 RUN chown -R app /home/app
 
