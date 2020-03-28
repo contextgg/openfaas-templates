@@ -1,7 +1,7 @@
 FROM golang:1.14 as build
 
-RUN mkdir -p /go/src/handler
-WORKDIR /go/src/handler
+RUN mkdir -p /usr/local/go/src/handler
+WORKDIR /usr/local/go/src/handler
 COPY . .
 
 # Run a gofmt and exclude all vendored code.
@@ -21,13 +21,14 @@ RUN apk --no-cache add ca-certificates \
 
 WORKDIR /home/app
 
-COPY --from=build /go/src/handler/handler    .
+COPY --from=build /usr/local/go/src/handler/handler    .
 
 RUN chown -R app /home/app
 
 USER app
 
 EXPOSE 8080
-EXPOSE 8081 
+EXPOSE 8081
+EXPOSE 8082
 
 CMD ["./handler"]
