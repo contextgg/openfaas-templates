@@ -12,7 +12,7 @@ import (
 	metrics "github.com/slok/go-http-metrics/metrics/prometheus"
 	"github.com/slok/go-http-metrics/middleware"
 
-	"handler/function"
+	"function"
 )
 
 const (

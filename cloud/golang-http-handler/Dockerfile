@@ -1,14 +1,18 @@
 FROM golang:1.14 as build
 
-RUN mkdir -p /usr/local/go/src/handler
-WORKDIR /usr/local/go/src/handler
+ENV GOPATH /app
+
+RUN mkdir -p /app/src
+WORKDIR /app/src
+
 COPY . .
 
+
 # Run a gofmt and exclude all vendored code.
-RUN test -z "$(gofmt -l $(find . -type f -name '*.go' -not -path "./vendor/*" -not -path "./function/vendor/*"))" || { echo "Run \"gofmt -s -w\" on your Golang code"; exit 1; }
+RUN test -z "$(gofmt -l $(find . -type f -name '*.go' -not -path "./handler/vendor/*" -not -path "./function/vendor/*"))" || { echo "Run \"gofmt -s -w\" on your Golang code"; exit 1; }
 
 RUN CGO_ENABLED=0 GOOS=linux \
-    go build --ldflags "-s -w" -a -installsuffix cgo -o handler . && \
+    go build --ldflags "-s -w" -a -installsuffix cgo -o handler handler && \
     go test $(go list ./... | grep -v /vendor/) -cover
 
 FROM alpine:3.10
@@ -21,7 +25,7 @@ RUN apk --no-cache add ca-certificates \
 
 WORKDIR /home/app
 
-COPY --from=build /usr/local/go/src/handler/handler    .
+COPY --from=build /app/src/handler/handler    .
 
 RUN chown -R app /home/app
 
