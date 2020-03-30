@@ -1,11 +1,17 @@
 FROM node:lts-alpine
 
-RUN mkdir -p /app
+RUN addgroup -S app && \
+  adduser -S -G app app && \
+  mkdir -p /app && \
+  chmod 775 /app && \
+  chown app:app /app
 WORKDIR /app
-
-ENV NODE_ENV=production
+USER app
 
 COPY . .
 RUN npm install
+
+ENV NODE_ENV=production
+RUN npm prune
 
 CMD ["npm", "run", "start"]
