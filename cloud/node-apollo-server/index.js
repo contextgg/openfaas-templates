@@ -30,10 +30,8 @@ const runServer = async () => {
   server.applyMiddleware({ app });
 
   app.listen({ port: PORT }, (() => {
-    console.log(`🚀 Server ready at http://localhost:${PORT}`)
   }));
   metrics.listen({ port: METRICS_PORT }, (() => {
-    console.log(`🚀 Server ready at http://localhost:${METRICS_PORT}`)
   }));
   
   // when we are ready!
