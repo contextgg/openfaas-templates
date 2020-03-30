@@ -3,7 +3,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "postinstall": "lerna bootstrap"
+    "bootstrap": "lerna bootstrap"
   },
   "devDependencies": {
     "lerna": "latest"

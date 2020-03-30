@@ -1,15 +1,14 @@
 FROM node:lts-alpine
 
-RUN addgroup -S app && \
-  adduser -S -G app app && \
-  mkdir -p /app && \
-  chmod 775 /app && \
-  chown app:app /app
+RUN mkdir -p /app
 WORKDIR /app
-USER app
+
+COPY package.json .
+COPY package-lock.json .
+RUN npm install
 
 COPY . .
-RUN npm install
+RUN npm run bootstrap
 
 ENV NODE_ENV=production
 RUN npm prune
