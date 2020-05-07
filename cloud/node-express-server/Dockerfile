@@ -13,10 +13,13 @@ COPY function/package*.json function/
 
 RUN npm run bootstrap
 
+COPY . .
+
+RUN npm --prefix /app/function run build
+
 ENV NODE_ENV=production
 RUN npm prune
 
-COPY . .
 
 EXPOSE 8080/TCP
 EXPOSE 8081/TCP

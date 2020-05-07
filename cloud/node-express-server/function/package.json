@@ -3,7 +3,7 @@
   "main": "handler.js",
   "scripts": {
     "start": "cross-env NODE_ENV=production node server.js",
-    "prepublish": "next build"
+    "build": "next build"
   },
   "devDependencies": {
     "nodemon": "latest"
