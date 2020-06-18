@@ -12,7 +12,7 @@ COPY . .
 RUN test -z "$(gofmt -l $(find . -type f -name '*.go' -not -path "./handler/vendor/*" -not -path "./function/vendor/*"))" || { echo "Run \"gofmt -s -w\" on your Golang code"; exit 1; }
 
 RUN GOOS=linux \
-    go build --ldflags "-s -w" -a -installsuffix cgo -o handler handler && \
+    go build -ldflags '-linkmode external -w -extldflags "-static"' -o handler handler && \
     go test $(go list ./... | grep -v /vendor/) -cover
 
 FROM alpine:3.10
