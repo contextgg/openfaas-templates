@@ -6,12 +6,12 @@
     "bootstrap": "lerna bootstrap"
   },
   "devDependencies": {
-    "lerna": "latest"
+    "lerna": "^3.22.1"
   },
   "dependencies": {
     "apollo-metrics": "latest",
     "express": "latest",
-    "lightship": "latest",
+    "lightship": "^6.1.1",
     "prom-client": "latest"
   }
 }
