@@ -18,8 +18,7 @@ COPY . .
 RUN npm --prefix /app/function run build
 
 ENV NODE_ENV=production
-RUN npm prune
-
+# RUN npm prune
 
 EXPOSE 8080/TCP
 EXPOSE 8081/TCP
