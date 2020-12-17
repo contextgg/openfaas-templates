@@ -1,17 +1,17 @@
 {
-  "name": "function",
-  "main": "index.js",
-  "scripts": {
-    "start": "node index.js",
-    "bootstrap": "lerna bootstrap"
-  },
-  "devDependencies": {
-    "lerna": "^3.22.1"
-  },
-  "dependencies": {
-    "apollo-metrics": "latest",
-    "express": "latest",
-    "lightship": "^6.1.1",
-    "prom-client": "latest"
-  }
+    "name": "function",
+    "main": "index.js",
+    "scripts": {
+        "start": "node index.js",
+        "bootstrap": "lerna bootstrap"
+    },
+    "devDependencies": {
+        "lerna": "^3.22.1"
+    },
+    "dependencies": {
+        "apollo-metrics": "latest",
+        "express": "latest",
+        "lightship": "^6.1.1",
+        "prom-client": "^13.0.0"
+    }
 }
