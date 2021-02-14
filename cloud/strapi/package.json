@@ -1,0 +1,12 @@
+{
+    "name": "function",
+    "main": "index.js",
+    "scripts": {
+        "start": "lerna run start",
+        "bootstrap": "lerna bootstrap"
+    },
+    "devDependencies": {
+        "lerna": "^3.22.1"
+    },
+    "dependencies": {}
+}
