@@ -1,12 +1,12 @@
 FROM golang:1.16 as build
 
 ENV GOPATH /app
+ENV GO111MODULE auto
 
 RUN mkdir -p /app/src
 WORKDIR /app/src
 
 COPY . .
-
 
 # Run a gofmt and exclude all vendored code.
 RUN test -z "$(gofmt -l $(find . -type f -name '*.go' -not -path "./handler/vendor/*" -not -path "./function/vendor/*"))" || { echo "Run \"gofmt -s -w\" on your Golang code"; exit 1; }

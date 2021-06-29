@@ -1,6 +1,6 @@
 module handler
 
-go 1.14
+go 1.16
 
 require (
 	github.com/heptiolabs/healthcheck v0.0.0-20180807145615-6ff867650f40
