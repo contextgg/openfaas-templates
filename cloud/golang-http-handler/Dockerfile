@@ -3,6 +3,9 @@ FROM golang:1.16 as build
 ENV GOPATH /app
 ENV GO111MODULE auto
 
+ARG DB_HOSTNAME
+ENV DB_HOSTNAME=$DB_HOSTNAME
+
 RUN mkdir -p /app/src
 WORKDIR /app/src
 
