@@ -16,7 +16,7 @@ RUN test -z "$(gofmt -l $(find . -type f -name '*.go' -not -path "./handler/vend
 
 RUN GOOS=linux \
     go build -ldflags '-linkmode external -w -extldflags "-static"' -o handler handler && \
-    go test $(go list ./... | grep -v /vendor/) -cover
+    go test -p=1 ./... -cover
 
 FROM alpine:3.10
 
