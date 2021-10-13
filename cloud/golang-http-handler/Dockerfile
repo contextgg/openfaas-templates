@@ -13,8 +13,6 @@ WORKDIR /app/src
 
 COPY function handler ./
 
-RUN test -f function/scripts/pre.sh && function/scripts/pre.sh
-
 # Run a gofmt and exclude all vendored code.
 RUN test -z "$(gofmt -l $(find . -type f -name '*.go' -not -path "./handler/*" -not -path "./function/vendor/*"))" || { echo "Run \"gofmt -s -w\" on your Golang code"; exit 1; }
 
