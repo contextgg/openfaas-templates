@@ -1,21 +1,25 @@
-FROM golang:1.17 as build
+ARG FROM=golang:1.17
+FROM $FROM as build
 
 ENV GOPATH /app
 ENV GO111MODULE auto
 
 ARG DB_HOSTNAME
 ENV DB_HOSTNAME=$DB_HOSTNAME
+ARG LDFLAGS='-linkmode external -w -s -extldflags "-static"'
 
 RUN mkdir -p /app/src
 WORKDIR /app/src
 
-COPY . .
+COPY function handler ./
+
+RUN test -f function/scripts/pre.sh && function/scripts/pre.sh
 
 # Run a gofmt and exclude all vendored code.
-RUN test -z "$(gofmt -l $(find . -type f -name '*.go' -not -path "./handler/vendor/*" -not -path "./function/vendor/*"))" || { echo "Run \"gofmt -s -w\" on your Golang code"; exit 1; }
+RUN test -z "$(gofmt -l $(find . -type f -name '*.go' -not -path "./handler/*" -not -path "./function/vendor/*"))" || { echo "Run \"gofmt -s -w\" on your Golang code"; exit 1; }
 
 RUN GOOS=linux \
-    go build -ldflags '-linkmode external -w -extldflags "-static"' -o handler handler && \
+    go build -ldflags $LDFLAGS -o handler handler && \
     go test -p=1 ./... -cover
 
 FROM alpine:3.10
