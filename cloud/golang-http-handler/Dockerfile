@@ -16,10 +16,9 @@ COPY function ./function
 # Run a gofmt and exclude all vendored code.
 RUN test -z "$(gofmt -l $(find . -type f -name '*.go' -not -path "./handler/*" -not -path "./function/vendor/*"))" || { echo "Run \"gofmt -s -w\" on your Golang code"; exit 1; }
 
-ARG LDFLAGS=-linkmode=external -w -s -extldflags '-static'
-RUN GOOS=linux \
-    go build -ldflags="${LDFLAGS}" -o handler handler && \
-    go test -p=1 ./... -cover
+ARG LDFLAGS="-linkmode=external -w -s -extldflags '-static'"
+RUN echo GOOS=linux go build -ldflags=\"${LDFLAGS}\" -o=handler handler > build.sh && chmod +x ./build.sh && ./build.sh
+RUN go test -p=1 ./... -cover
 
 FROM alpine:3.10
 
