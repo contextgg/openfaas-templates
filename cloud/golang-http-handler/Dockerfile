@@ -11,7 +11,8 @@ ARG LDFLAGS='-linkmode external -w -s -extldflags "-static"'
 RUN mkdir -p /app/src
 WORKDIR /app/src
 
-COPY function handler ./
+COPY function ./function
+COPY handler ./handler
 
 # Run a gofmt and exclude all vendored code.
 RUN test -z "$(gofmt -l $(find . -type f -name '*.go' -not -path "./handler/*" -not -path "./function/vendor/*"))" || { echo "Run \"gofmt -s -w\" on your Golang code"; exit 1; }
