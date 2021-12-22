@@ -4,8 +4,7 @@ RUN mkdir -p /app
 
 WORKDIR /app
 
-COPY function/package.json ./
-COPY function/package*.json ./
+COPY function/package.json function/package*.json function/*.tgz ./
 RUN npm install
 
 FROM builder AS application
