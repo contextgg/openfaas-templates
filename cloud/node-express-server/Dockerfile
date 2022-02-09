@@ -15,7 +15,7 @@ RUN npm run bootstrap
 
 COPY . .
 
-RUN npm --prefix /app/function run build
+RUN npm --prefix /app/function run build --if-present
 
 ENV NODE_ENV=production
 # RUN npm prune

@@ -16,7 +16,7 @@ RUN npm run bootstrap
 COPY . .
 
 ENV NODE_ENV=production
-RUN npm --prefix /app/function run build
+RUN npm --prefix /app/function run build --if-present
 
 EXPOSE 8080/TCP
 EXPOSE 8081/TCP
