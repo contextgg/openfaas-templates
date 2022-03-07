@@ -2,8 +2,9 @@
     "name": "function",
     "main": "index.js",
     "scripts": {
-        "start": "lerna run start",
-        "bootstrap": "lerna bootstrap"
+        "bootstrap": "lerna bootstrap",
+        "build": "lerna run build",
+        "start": "lerna run start"
     },
     "devDependencies": {
         "lerna": "^3.22.1"

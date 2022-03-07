@@ -1,4 +1,4 @@
-FROM node:lts-alpine
+FROM node
 
 RUN mkdir -p /app
 WORKDIR /app
@@ -16,7 +16,7 @@ RUN npm run bootstrap
 COPY . .
 
 ENV NODE_ENV=production
-RUN npm --prefix /app/function run build --if-present
+RUN npm run build
 
 EXPOSE 8080/TCP
 EXPOSE 8081/TCP
