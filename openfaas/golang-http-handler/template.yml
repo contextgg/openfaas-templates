@@ -1,2 +1,0 @@
-language: golang-http-handler
-fprocess: ./handler

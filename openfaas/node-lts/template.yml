@@ -1,2 +1,0 @@
-language: node-lts
-fprocess: node server.js

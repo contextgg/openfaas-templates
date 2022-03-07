@@ -1,2 +1,0 @@
-language: golang-http-mongo
-fprocess: ./handler
