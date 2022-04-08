@@ -12,23 +12,21 @@ const runServer = async () => {
   const app = express();
   const metrics = express();
   
-  const lightship = createLightship({
-    detectKubernetes: false,
-    port: HEALTH_PORT,
-  });
-  lightship.registerShutdownHandler(() => {
-    app.close();
-  });
-  
   metrics.get("/metrics", ((_, res) => res.send(register.metrics())));
 
   await handler(app);
 
-  app.listen({ port: PORT }, (() => {
-  }));
-  metrics.listen({ port: METRICS_PORT }, (() => {
-  }));
+  const appServer = app.listen(PORT);
+  const metricsServer = metrics.listen(METRICS_PORT);
   
+  const lightship = await createLightship({
+    port: HEALTH_PORT,
+  });
+  lightship.registerShutdownHandler(() => {
+    appServer.close();
+    metricsServer.close();
+  });
+
   // when we are ready!
   lightship.signalReady();
 };
