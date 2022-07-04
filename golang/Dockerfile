@@ -1,4 +1,4 @@
-ARG FROM=golang:1.17
+ARG FROM=golang:1.18
 FROM $FROM as build
 
 ENV GOPATH /app

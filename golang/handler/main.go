@@ -60,7 +60,7 @@ func handler(h http.Handler) Startable {
 
 func getStartable() Startable {
 	// Create our server.
-	h := function.NewService()
+	h := function.NewHandler()
 
 	switch start := h.(type) {
 	case Startable:
