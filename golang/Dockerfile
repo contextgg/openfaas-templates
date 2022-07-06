@@ -17,10 +17,10 @@ COPY function ./function
 RUN test -z "$(gofmt -l $(find . -type f -name '*.go' -not -path "./handler/*" -not -path "./function/vendor/*"))" || { echo "Run \"gofmt -s -w\" on your Golang code"; exit 1; }
 
 ARG LDFLAGS="-linkmode=external -w -s -extldflags '-static'"
-RUN echo GOOS=linux go build -ldflags=\"${LDFLAGS}\" -o=handler handler > build.sh && chmod +x ./build.sh && ./build.sh
+RUN echo GOOS=linux go build -ldflags=\"${LDFLAGS}\" -o=app handler > build.sh && chmod +x ./build.sh && ./build.sh
 RUN go test -p=1 ./... -cover
 
-FROM alpine:3.10
+FROM alpine:3.16
 
 # Add non root user and certs
 RUN apk --no-cache add ca-certificates \
@@ -30,7 +30,7 @@ RUN apk --no-cache add ca-certificates \
 
 WORKDIR /home/app
 
-COPY --from=build /app/src/handler/handler    .
+COPY --from=build /app/src/app    .
 
 RUN chown -R app /home/app
 
@@ -40,4 +40,4 @@ EXPOSE 8080
 EXPOSE 8081
 EXPOSE 8082
 
-CMD ["./handler"]
+CMD ["./app"]
