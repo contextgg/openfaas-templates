@@ -55,7 +55,7 @@ func NewZipkin(url string, res *resource.Resource) (Startable, error) {
 	return newTracer(exporter, res)
 }
 
-func NewTracer(ctx context.Context, cfg config.Config) (Startable, error) {
+func NewTracer(ctx context.Context, cfg *config.Config) (Startable, error) {
 	if !cfg.Tracing.Enabled {
 		return NewNoop(), nil
 	}
