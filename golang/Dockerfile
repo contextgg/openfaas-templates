@@ -1,5 +1,8 @@
+ARG FILES=scratch
 ARG FROM=golang:1.19
-FROM $FROM as build
+
+FROM ${FILES} as handler
+FROM ${FROM} as build
 
 ENV GOPATH /app
 ENV GO111MODULE on
@@ -10,7 +13,8 @@ ENV DB_HOSTNAME=$DB_HOSTNAME
 RUN mkdir -p /app/src
 WORKDIR /app/src
 
-COPY . .
+COPY --from=server /app /app/src
+COPY --from=handler /app /app/src/function
 
 # Run a gofmt and exclude all vendored code.
 RUN test -z "$(gofmt -l $(find . -type f -name '*.go' -not -path "./handler/*" -not -path "./function/vendor/*"))" || { echo "Run \"gofmt -s -w\" on your Golang code"; exit 1; }
