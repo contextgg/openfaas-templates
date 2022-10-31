@@ -1,6 +1,8 @@
 ARG FILES=scratch
 ARG FROM=golang:1.19
 
+FROM scratch as server
+COPY . /app
 FROM ${FILES} as handler
 FROM ${FROM} as build
 
