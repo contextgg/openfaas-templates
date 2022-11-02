@@ -18,18 +18,18 @@
 // 	protoc        v3.12.2
 // source: google/devtools/cloudtrace/v2/trace.proto
 
-package cloudtrace
+package tracepb
 
 import (
 	reflect "reflect"
 	sync "sync"
 
+	timestamp "github.com/golang/protobuf/ptypes/timestamp"
+	wrappers "github.com/golang/protobuf/ptypes/wrappers"
 	_ "google.golang.org/genproto/googleapis/api/annotations"
 	status "google.golang.org/genproto/googleapis/rpc/status"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
-	timestamppb "google.golang.org/protobuf/types/known/timestamppb"
-	wrapperspb "google.golang.org/protobuf/types/known/wrapperspb"
 )
 
 const (
@@ -234,7 +234,7 @@ type Span struct {
 
 	// Required. The resource name of the span in the following format:
 	//
-	//     projects/[PROJECT_ID]/traces/[TRACE_ID]/spans/[SPAN_ID]
+	//	projects/[PROJECT_ID]/traces/[TRACE_ID]/spans/[SPAN_ID]
 	//
 	// [TRACE_ID] is a unique identifier for a trace within a project;
 	// it is a 32-character hexadecimal encoding of a 16-byte array.
@@ -258,11 +258,11 @@ type Span struct {
 	// Required. The start time of the span. On the client side, this is the time kept by
 	// the local machine where the span execution starts. On the server side, this
 	// is the time when the server's application handler starts running.
-	StartTime *timestamppb.Timestamp `protobuf:"bytes,5,opt,name=start_time,json=startTime,proto3" json:"start_time,omitempty"`
+	StartTime *timestamp.Timestamp `protobuf:"bytes,5,opt,name=start_time,json=startTime,proto3" json:"start_time,omitempty"`
 	// Required. The end time of the span. On the client side, this is the time kept by
 	// the local machine where the span execution ends. On the server side, this
 	// is the time when the server application handler stops running.
-	EndTime *timestamppb.Timestamp `protobuf:"bytes,6,opt,name=end_time,json=endTime,proto3" json:"end_time,omitempty"`
+	EndTime *timestamp.Timestamp `protobuf:"bytes,6,opt,name=end_time,json=endTime,proto3" json:"end_time,omitempty"`
 	// A set of attributes on the span. You can have up to 32 attributes per
 	// span.
 	Attributes *Span_Attributes `protobuf:"bytes,7,opt,name=attributes,proto3" json:"attributes,omitempty"`
@@ -279,10 +279,10 @@ type Span struct {
 	// the same process as its parent. If you do not set this parameter,
 	// Stackdriver Trace is unable to take advantage of this helpful
 	// information.
-	SameProcessAsParentSpan *wrapperspb.BoolValue `protobuf:"bytes,12,opt,name=same_process_as_parent_span,json=sameProcessAsParentSpan,proto3" json:"same_process_as_parent_span,omitempty"`
+	SameProcessAsParentSpan *wrappers.BoolValue `protobuf:"bytes,12,opt,name=same_process_as_parent_span,json=sameProcessAsParentSpan,proto3" json:"same_process_as_parent_span,omitempty"`
 	// Optional. The number of child spans that were generated while this span
 	// was active. If set, allows implementation to detect missing child spans.
-	ChildSpanCount *wrapperspb.Int32Value `protobuf:"bytes,13,opt,name=child_span_count,json=childSpanCount,proto3" json:"child_span_count,omitempty"`
+	ChildSpanCount *wrappers.Int32Value `protobuf:"bytes,13,opt,name=child_span_count,json=childSpanCount,proto3" json:"child_span_count,omitempty"`
 	// Optional. Distinguishes between spans generated in a particular context. For example,
 	// two spans with the same name may be distinguished using `CLIENT` (caller)
 	// and `SERVER` (callee) to identify an RPC call.
@@ -349,14 +349,14 @@ func (x *Span) GetDisplayName() *TruncatableString {
 	return nil
 }
 
-func (x *Span) GetStartTime() *timestamppb.Timestamp {
+func (x *Span) GetStartTime() *timestamp.Timestamp {
 	if x != nil {
 		return x.StartTime
 	}
 	return nil
 }
 
-func (x *Span) GetEndTime() *timestamppb.Timestamp {
+func (x *Span) GetEndTime() *timestamp.Timestamp {
 	if x != nil {
 		return x.EndTime
 	}
@@ -398,14 +398,14 @@ func (x *Span) GetStatus() *status.Status {
 	return nil
 }
 
-func (x *Span) GetSameProcessAsParentSpan() *wrapperspb.BoolValue {
+func (x *Span) GetSameProcessAsParentSpan() *wrappers.BoolValue {
 	if x != nil {
 		return x.SameProcessAsParentSpan
 	}
 	return nil
 }
 
-func (x *Span) GetChildSpanCount() *wrapperspb.Int32Value {
+func (x *Span) GetChildSpanCount() *wrappers.Int32Value {
 	if x != nil {
 		return x.ChildSpanCount
 	}
@@ -428,6 +428,7 @@ type AttributeValue struct {
 	// The type of the value.
 	//
 	// Types that are assignable to Value:
+	//
 	//	*AttributeValue_StringValue
 	//	*AttributeValue_IntValue
 	//	*AttributeValue_BoolValue
@@ -720,9 +721,9 @@ type Span_Attributes struct {
 	// long. The value can be a string up to 256 bytes, a signed 64-bit integer,
 	// or the Boolean values `true` and `false`. For example:
 	//
-	//     "/instance_id": { "string_value": { "value": "my-instance" } }
-	//     "/http/request_bytes": { "int_value": 300 }
-	//     "abc.com/myattribute": { "bool_value": false }
+	//	"/instance_id": { "string_value": { "value": "my-instance" } }
+	//	"/http/request_bytes": { "int_value": 300 }
+	//	"abc.com/myattribute": { "bool_value": false }
 	AttributeMap map[string]*AttributeValue `protobuf:"bytes,1,rep,name=attribute_map,json=attributeMap,proto3" json:"attribute_map,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
 	// The number of attributes that were discarded. Attributes can be discarded
 	// because their keys are too long or because there are too many attributes.
@@ -783,11 +784,12 @@ type Span_TimeEvent struct {
 	unknownFields protoimpl.UnknownFields
 
 	// The timestamp indicating the time the event occurred.
-	Time *timestamppb.Timestamp `protobuf:"bytes,1,opt,name=time,proto3" json:"time,omitempty"`
+	Time *timestamp.Timestamp `protobuf:"bytes,1,opt,name=time,proto3" json:"time,omitempty"`
 	// A `TimeEvent` can contain either an `Annotation` object or a
 	// `MessageEvent` object, but not both.
 	//
 	// Types that are assignable to Value:
+	//
 	//	*Span_TimeEvent_Annotation_
 	//	*Span_TimeEvent_MessageEvent_
 	Value isSpan_TimeEvent_Value `protobuf_oneof:"value"`
@@ -825,7 +827,7 @@ func (*Span_TimeEvent) Descriptor() ([]byte, []int) {
 	return file_google_devtools_cloudtrace_v2_trace_proto_rawDescGZIP(), []int{0, 1}
 }
 
-func (x *Span_TimeEvent) GetTime() *timestamppb.Timestamp {
+func (x *Span_TimeEvent) GetTime() *timestamp.Timestamp {
 	if x != nil {
 		return x.Time
 	}
@@ -1704,10 +1706,10 @@ var file_google_devtools_cloudtrace_v2_trace_proto_goTypes = []interface{}{
 	(*Span_TimeEvent_MessageEvent)(nil),   // 15: google.devtools.cloudtrace.v2.Span.TimeEvent.MessageEvent
 	(*StackTrace_StackFrame)(nil),         // 16: google.devtools.cloudtrace.v2.StackTrace.StackFrame
 	(*StackTrace_StackFrames)(nil),        // 17: google.devtools.cloudtrace.v2.StackTrace.StackFrames
-	(*timestamppb.Timestamp)(nil),         // 18: google.protobuf.Timestamp
+	(*timestamp.Timestamp)(nil),           // 18: google.protobuf.Timestamp
 	(*status.Status)(nil),                 // 19: google.rpc.Status
-	(*wrapperspb.BoolValue)(nil),          // 20: google.protobuf.BoolValue
-	(*wrapperspb.Int32Value)(nil),         // 21: google.protobuf.Int32Value
+	(*wrappers.BoolValue)(nil),            // 20: google.protobuf.BoolValue
+	(*wrappers.Int32Value)(nil),           // 21: google.protobuf.Int32Value
 }
 var file_google_devtools_cloudtrace_v2_trace_proto_depIdxs = []int32{
 	7,  // 0: google.devtools.cloudtrace.v2.Span.display_name:type_name -> google.devtools.cloudtrace.v2.TruncatableString

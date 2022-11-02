@@ -3,11 +3,11 @@ package main
 import (
 	"context"
 
+	"function"
+
 	"github.com/contextcloud/graceful"
 	"github.com/contextcloud/graceful/config"
 	"github.com/contextcloud/graceful/srv"
-
-	"function"
 )
 
 func main() {
