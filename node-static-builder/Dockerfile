@@ -1,27 +1,28 @@
-FROM node:17 as builder
+ARG FUNCTION_IMG
+ARG FROM=node:19
+
+FROM scratch as server
+ARG FILES=node-static-builder
+COPY ${FILES} /app
+
+FROM ${FUNCTION_IMG} as function
+FROM ${FROM} as build
 
 RUN mkdir -p /app
 
-WORKDIR /app
+COPY --from=server /app /app
+RUN rm -rf /app/function
+COPY --from=function /app /app/function
 
-COPY function/package.json function/package*.json function/*.tgz ./
-RUN npm install
-
-FROM builder AS application
-
-# COPY function files and folders
-COPY function/ ./
-
+WORKDIR /app/function
+RUN npm ci
 RUN npm run build
 
 FROM nginx:stable
 
-COPY nginx.conf /etc/nginx/nginx.conf
-
+COPY --from=server /app/nginx.conf /etc/nginx/nginx.conf
 RUN mkdir -p /app
-
 WORKDIR /app
-
-COPY --from=application /app/build /app/build
+COPY --from=build /app/function/build /app/build
 
 CMD ["nginx"]
